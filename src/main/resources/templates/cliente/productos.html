@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - TuSuperJK</title>
+    <style>
+        :root {
+            --pastel-cream: #FFF8F0;
+            --pastel-mint: #E0F2E9;
+            --pastel-lavender: #E8E0F2;
+            --pastel-coral: #FFD6CC;
+            --pastel-blue: #CCE2FF;
+            --black: #1A1A1A;
+            --gray: #4A4A4A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 3px solid var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--black);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-badge {
+            background: var(--pastel-lavender);
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: var(--pastel-mint);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--black);
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 1.5rem;
+            box-shadow: 8px 8px 0 var(--black);
+            transition: all 0.2s ease;
+        }
+
+        .product-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0 var(--black);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border: 2px solid var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-stock {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--pastel-blue);
+        }
+
+        .btn-secondary {
+            background: var(--pastel-coral);
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="brand">🛒 TuSuperJK - Productos</div>
+        <div class="user-info">
+            <div class="user-badge">
+                👋 Hola, <span th:text="${username}"></span>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a th:href="@{/cliente/dashboard}" class="back-btn">← Volver al Dashboard</a>
+        <h1 class="page-title">Nuestros Productos</h1>
+        
+        <div class="products-grid">
+            <div class="product-card" th:each="producto : ${productos}">
+                <img th:if="${producto.imagenUrl}" th:src="${producto.imagenUrl}" alt="Producto" class="product-image">
+                <img th:unless="${producto.imagenUrl}" src="https://via.placeholder.com/300x200?text=Sin+Imagen" alt="Producto" class="product-image">
+                <h3 class="product-name" th:text="${producto.nombre}"></h3>
+                <div class="product-price" th:text="'$' + ${#numbers.formatDecimal(producto.precio, 1, 2)}"></div>
+                <div class="product-stock" th:text="'Disponibles: ' + ${producto.cantidad}"></div>
+                <div class="product-actions">
+                    <button class="btn btn-primary">Agregar al Carrito</button>
+                    <button class="btn btn-secondary">❤️ Favorito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Inventario - TuSuperJK</title>
+	<link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+	<div class="brutal-container">
+		<!-- HEADER -->
+		<header class="brutal-header">
+			<h1>📊 INVENTARIO</h1>
+			<nav class="brutal-nav">
+				<a th:href="@{/tendero/homepage}" class="nav-item">🏠 Inicio</a>
+				<a th:href="@{/tendero/inventario}" class="nav-item active">📦 Inventario</a>
+				<a th:href="@{/tendero/pedidos}" class="nav-item">📑 Pedidos</a>
+			</nav>
+		</header>
+
+		<!-- LISTA DE PRODUCTOS -->
+		<main class="brutal-main">
+			<section>
+				<h2 class="section-title">Productos en Stock</h2>
+
+				<div th:if="${productos != null}" class="inventory-grid">
+					<div th:each="producto : ${productos}" class="producto-card">
+						<div class="producto-header">
+							<h3 th:text="${producto.nombre}">Producto Demo</h3>
+							<span class="producto-id">ID: <span th:text="${producto.id}"></span></span>
+						</div>
+
+						<div class="producto-body">
+							<p><b>Precio:</b> <span th:text="${producto.precio}"></span> €</p>
+							<p><b>Cantidad:</b> <span th:text="${producto.cantidad}"></span></p>
+						</div>
+
+						<div class="producto-actions">
+							<a th:href="@{'/tendero/inventario/editar/' + ${producto.id}}"
+								class="brutal-btn secondary">✏️ Editar</a>
+							<a th:href="@{'/tendero/inventario/eliminar/' + ${producto.id}}"
+								onclick="return confirm('¿Seguro que deseas eliminar este producto?')"
+								class="brutal-btn danger">🗑️ Eliminar</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<hr>
+
+			<!-- FORMULARIO -->
+			<section>
+				<h2 class="section-title">➕ Agregar Producto</h2>
+				<form th:action="@{/tendero/inventario/agregar}" method="post" th:object="${productoNuevo}"
+					class="form-inventario">
+					<label>Nombre:</label>
+					<input type="text" th:field="*{nombre}" required>
+
+					<label>Precio:</label>
+					<input type="number" step="0.01" th:field="*{precio}" required>
+
+					<label>Cantidad:</label>
+					<input type="number" th:field="*{cantidad}" required>
+
+					<label>Imagen (URL):</label>
+					<input type="text" th:field="*{imagenUrl}">
+
+					<button type="submit" class="brutal-btn primary">💾 Agregar</button>
+				</form>
+			</section>
+		</main>
+	</div>
+</body>
+
+</html>

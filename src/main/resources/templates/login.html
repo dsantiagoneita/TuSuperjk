@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Acceso | TuSuperJK</title>
+	<style>
+		:root {
+			--pastel-cream: #FFF8F0;
+			--pastel-mint: #E0F2E9;
+			--pastel-lavender: #E8E0F2;
+			--pastel-coral: #FFD6CC;
+			--pastel-blue: #CCE2FF;
+			--black: #1A1A1A;
+			--gray: #4A4A4A;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+		}
+
+		body {
+			background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
+		}
+
+		.login-container {
+			background: rgba(255, 255, 255, 0.95);
+			border: 3px solid var(--black);
+			border-radius: 0;
+			padding: 3rem 2.5rem;
+			width: 100%;
+			max-width: 480px;
+			box-shadow: 12px 12px 0 var(--black);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.login-container::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 8px;
+			background: linear-gradient(90deg,
+					var(--pastel-coral) 0%,
+					var(--pastel-blue) 25%,
+					var(--pastel-mint) 50%,
+					var(--pastel-lavender) 75%,
+					var(--pastel-coral) 100%);
+		}
+
+		.brand-header {
+			text-align: center;
+			margin-bottom: 2.5rem;
+		}
+
+		.brand-title {
+			font-size: 2.5rem;
+			font-weight: 900;
+			color: var(--black);
+			letter-spacing: -0.02em;
+			margin-bottom: 0.5rem;
+			text-transform: uppercase;
+		}
+
+		.brand-subtitle {
+			font-size: 1.1rem;
+			color: var(--gray);
+			font-weight: 500;
+		}
+
+		.alert {
+			padding: 1rem 1.25rem;
+			margin-bottom: 1.5rem;
+			border: 2px solid var(--black);
+			background: var(--pastel-coral);
+			font-weight: 600;
+			border-radius: 0;
+		}
+
+		.alert-success {
+			background: var(--pastel-mint);
+			border-color: var(--black);
+		}
+
+		.form-group {
+			margin-bottom: 1.75rem;
+		}
+
+		.form-label {
+			display: block;
+			font-weight: 700;
+			margin-bottom: 0.5rem;
+			color: var(--black);
+			font-size: 0.95rem;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		.form-input {
+			width: 100%;
+			padding: 1rem 1.25rem;
+			border: 2px solid var(--black);
+			background: white;
+			font-size: 1rem;
+			font-weight: 500;
+			transition: all 0.2s ease;
+			border-radius: 0;
+		}
+
+		.form-input:focus {
+			outline: none;
+			background: var(--pastel-blue);
+			transform: translate(-2px, -2px);
+			box-shadow: 4px 4px 0 var(--black);
+		}
+
+		.checkbox-group {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			margin-bottom: 1.75rem;
+		}
+
+		.checkbox-input {
+			width: 20px;
+			height: 20px;
+			border: 2px solid var(--black);
+			background: white;
+			appearance: none;
+			position: relative;
+			cursor: pointer;
+		}
+
+		.checkbox-input:checked {
+			background: var(--pastel-coral);
+		}
+
+		.checkbox-input:checked::after {
+			content: '✓';
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-weight: bold;
+			color: var(--black);
+		}
+
+		.checkbox-label {
+			font-weight: 600;
+			color: var(--black);
+			cursor: pointer;
+		}
+
+		.btn-primary {
+			width: 100%;
+			padding: 1.25rem;
+			background: var(--pastel-coral);
+			border: 2px solid var(--black);
+			color: var(--black);
+			font-size: 1.1rem;
+			font-weight: 800;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin-bottom: 1.5rem;
+			border-radius: 0;
+		}
+
+		.btn-primary:hover {
+			background: var(--pastel-blue);
+			transform: translate(-4px, -4px);
+			box-shadow: 8px 8px 0 var(--black);
+		}
+
+		.btn-secondary {
+			width: 100%;
+			padding: 1rem;
+			background: transparent;
+			border: 2px solid var(--black);
+			color: var(--black);
+			font-size: 1rem;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin-bottom: 1.5rem;
+			border-radius: 0;
+		}
+
+		.btn-secondary:hover {
+			background: var(--pastel-mint);
+			transform: translate(-2px, -2px);
+			box-shadow: 4px 4px 0 var(--black);
+		}
+
+		.divider {
+			text-align: center;
+			margin: 2rem 0;
+			position: relative;
+			color: var(--gray);
+			font-weight: 600;
+		}
+
+		.divider::before {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: 0;
+			right: 0;
+			height: 2px;
+			background: var(--black);
+			z-index: 1;
+		}
+
+		.divider span {
+			background: white;
+			padding: 0 1rem;
+			position: relative;
+			z-index: 2;
+		}
+
+		.links {
+			text-align: center;
+			margin-top: 1.5rem;
+		}
+
+		.link {
+			color: var(--black);
+			text-decoration: none;
+			font-weight: 700;
+			border-bottom: 2px solid var(--pastel-lavender);
+			padding-bottom: 2px;
+			transition: all 0.2s ease;
+		}
+
+		.link:hover {
+			border-bottom-color: var(--black);
+			background: var(--pastel-lavender);
+		}
+
+		.password-requirements {
+			font-size: 0.85rem;
+			color: var(--gray);
+			margin-top: 0.5rem;
+			font-weight: 500;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="login-container">
+		<div class="brand-header">
+			<h1 class="brand-title">Acceso</h1>
+			<p class="brand-subtitle">Bienvenido de vuelta</p>
+		</div>
+
+		<form th:action="@{/login}" method="post">
+			<div th:if="${param.error}" class="alert">
+				❌ Email o contraseña incorrectos
+			</div>
+			<div th:if="${param.logout}" class="alert alert-success">
+				✅ Has cerrado sesión exitosamente
+			</div>
+			<div th:if="${param.success}" class="alert alert-success">
+				🎉 Registro exitoso. Por favor inicia sesión.
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="form-label">Email</label>
+				<input type="email" id="email" name="email" class="form-input" placeholder="tu@email.com" required>
+			</div>
+
+			<div class="form-group">
+				<label for="password" class="form-label">Contraseña</label>
+				<input type="password" id="password" name="password" class="form-input" placeholder="••••••••" required>
+				<div class="password-requirements">
+					Mínimo 8 caracteres, 1 mayúscula, 1 número
+				</div>
+			</div>
+
+			<div class="checkbox-group">
+				<input type="checkbox" id="remember-me" name="remember-me" class="checkbox-input">
+				<label for="remember-me" class="checkbox-label">Recordar sesión</label>
+			</div>
+
+			<button type="submit" class="btn-primary">Acceder</button>
+		</form>
+
+		<div class="divider"><span>¿Primera vez?</span></div>
+
+		<a th:href="@{/register}" class="btn-secondary">Crear Cuenta Nueva</a>
+
+		<div class="links">
+			<a href="#" class="link">¿Olvidaste tu contraseña?</a>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - TuSuperJK</title>
+    <style>
+        :root {
+            --pastel-cream: #FFF8F0;
+            --pastel-mint: #E0F2E9;
+            --pastel-lavender: #E8E0F2;
+            --pastel-coral: #FFD6CC;
+            --pastel-blue: #CCE2FF;
+            --pastel-yellow: #FFF2CC;
+            --pastel-pink: #FFE6E6;
+            --black: #1A1A1A;
+            --gray: #4A4A4A;
+            --dark-gray: #2A2A2A;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 3px solid var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            border: 2px solid var(--black);
+            background: var(--pastel-lavender);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .nav-link.active {
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-badge {
+            background: var(--pastel-lavender);
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn {
+            background: var(--pastel-blue);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0;
+            font-size: 1rem;
+        }
+
+        .logout-btn:hover {
+            background: var(--pastel-coral);
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--pastel-mint);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--black);
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+            text-decoration: none;
+            color: var(--black);
+        }
+
+        .page-header {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                var(--pastel-coral) 0%, 
+                var(--pastel-pink) 50%, 
+                var(--pastel-lavender) 100%);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--pastel-yellow);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+        }
+
+        .filters-bar {
+            background: white;
+            border: 2px solid var(--black);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .filter-label {
+            font-weight: 700;
+            color: var(--black);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--black);
+            background: white;
+            font-weight: 600;
+            cursor: pointer;
+            min-width: 150px;
+        }
+
+        .filter-btn {
+            background: var(--pastel-blue);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: var(--pastel-coral);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 1.5rem;
+            box-shadow: 8px 8px 0 var(--black);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--pastel-pink);
+        }
+
+        .product-card:hover {
+            transform: translate(-6px, -6px);
+            box-shadow: 14px 14px 0 var(--black);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border: 2px solid var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .product-description {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-original-price {
+            font-size: 1rem;
+            color: var(--gray);
+            text-decoration: line-through;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-discount {
+            background: var(--pastel-mint);
+            border: 2px solid var(--black);
+            padding: 0.25rem 0.75rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .product-stock {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stock-available { color: var(--success); }
+        .stock-low { color: var(--warning); }
+        .stock-out { color: var(--error); }
+
+        .product-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--pastel-blue);
+        }
+
+        .btn-primary:hover {
+            background: var(--pastel-mint);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-secondary {
+            background: var(--pastel-coral);
+        }
+
+        .btn-secondary:hover {
+            background: #ffb3a6;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-danger {
+            background: #ffebee;
+            color: var(--error);
+        }
+
+        .btn-danger:hover {
+            background: #ffcdd2;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .empty-state {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--black);
+            margin: 3rem 0;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .empty-description {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .suggestions {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 2.5rem;
+            margin-top: 3rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .suggestion-card {
+            background: var(--pastel-cream);
+            border: 2px solid var(--black);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .suggestion-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .suggestion-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .suggestion-text {
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-select {
+                min-width: auto;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="brand">
+            <span>❤️</span>
+            <span>TuSuperJK - Favoritos</span>
+        </div>
+        
+        <div class="nav-links">
+            <a th:href="@{/cliente/dashboard}" class="nav-link">
+                <span>🏠</span>
+                <span>Inicio</span>
+            </a>
+            <a th:href="@{/cliente/productos}" class="nav-link">
+                <span>🛒</span>
+                <span>Productos</span>
+            </a>
+            <a th:href="@{/cliente/favoritos}" class="nav-link active">
+                <span>❤️</span>
+                <span>Favoritos</span>
+            </a>
+            <a th:href="@{/cliente/pedidos}" class="nav-link">
+                <span>📦</span>
+                <span>Mis Pedidos</span>
+            </a>
+            <a th:href="@{/cliente/carrito}" class="nav-link">
+                <span>🛒</span>
+                <span>Carrito</span>
+            </a>
+            <a th:href="@{/cliente/perfil}" class="nav-link">
+                <span>👤</span>
+                <span>Mi Perfil</span>
+            </a>
+        </div>
+
+        <div class="user-info">
+            <div class="user-badge">
+                <span>👋</span>
+                <span>Hola, <span th:text="${username}"></span></span>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Botón de volver -->
+        <a th:href="@{/cliente/dashboard}" class="back-btn">
+            <span>←</span>
+            <span>Volver al Dashboard</span>
+        </a>
+
+        <!-- Encabezado de la página -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <span>❤️</span>
+                <span>Mis Productos Favoritos</span>
+            </h1>
+            <p class="page-subtitle">
+                Tus productos guardados para comprar más tarde. Agrega más productos a favoritos haciendo clic en el corazón ❤️
+            </p>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span>📊</span>
+                    <span th:text="${totalFavoritos} + ' productos favoritos'"></span>
+                </div>
+                <div class="stat-item">
+                    <span>💰</span>
+                    <span>Total: $<span th:text="${#numbers.formatDecimal(totalFavoritos * 15000, 0, 'COMMA', 2, 'POINT')}"></span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de filtros -->
+        <div class="filters-bar">
+            <span class="filter-label">Filtrar por:</span>
+            <select class="filter-select">
+                <option value="all">Todos los productos</option>
+                <option value="available">Disponibles</option>
+                <option value="discount">Con descuento</option>
+                <option value="price-low">Precio: Menor a Mayor</option>
+                <option value="price-high">Precio: Mayor a Menor</option>
+            </select>
+            <select class="filter-select">
+                <option value="all">Todas las categorías</option>
+                <option value="food">Alimentos</option>
+                <option value="beverages">Bebidas</option>
+                <option value="cleaning">Limpieza</option>
+                <option value="personal">Cuidado Personal</option>
+            </select>
+            <button class="filter-btn">Aplicar Filtros</button>
+        </div>
+
+        <!-- Lista de productos favoritos -->
+        <div th:if="${not #lists.isEmpty(favoritos)}" class="products-grid">
+            <div th:each="producto : ${favoritos}" class="product-card">
+                <div class="product-badge">❤️ Favorito</div>
+                <img th:src="${producto.imagenUrl}" 
+                     th:alt="${producto.nombre}" 
+                     class="product-image"
+                     onerror="this.src='https://via.placeholder.com/300x200?text=Producto+Sin+Imagen'">
+                
+                <h3 class="product-name" th:text="${producto.nombre}"></h3>
+                <p class="product-description" th:text="'Producto de alta calidad disponible para entrega inmediata.'"></p>
+                
+                <div class="product-price" th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 2, 'POINT')}"></div>
+                
+                <div th:if="${producto.precio < 10000}" class="product-discount">
+                    ¡Oferta Especial!
+                </div>
+                
+                <div class="product-stock" th:classappend="${producto.cantidad > 10} ? 'stock-available' : 
+                                                           ${producto.cantidad > 0} ? 'stock-low' : 'stock-out'">
+                    <span th:if="${producto.cantidad > 10}">✅</span>
+                    <span th:if="${producto.cantidad <= 10 and producto.cantidad > 0}">⚠️</span>
+                    <span th:if="${producto.cantidad <= 0}">❌</span>
+                    <span th:text="${producto.cantidad > 0} ? 
+                                  ('Disponible: ' + ${producto.cantidad} + ' unidades') : 
+                                  'Agotado'"></span>
+                </div>
+
+                <div class="product-actions">
+                    <button class="btn btn-primary" 
+                            th:disabled="${producto.cantidad <= 0}"
+                            th:classappend="${producto.cantidad <= 0} ? 'btn-disabled' : ''">
+                        🛒 Agregar al Carrito
+                    </button>
+                    <button class="btn btn-secondary">
+                        🔄 Comparar
+                    </button>
+                    <button class="btn btn-danger">
+                        ❌ Quitar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado vacío -->
+        <div th:if="${#lists.isEmpty(favoritos)}" class="empty-state">
+            <div class="empty-icon">😔</div>
+            <h2 class="empty-title">Aún no tienes favoritos</h2>
+            <p class="empty-description">
+                Los productos que agregues a favoritos aparecerán aquí. Es una forma fácil de guardar 
+                los productos que te interesan para comprarlos más tarde.
+            </p>
+            <a th:href="@{/cliente/productos}" class="btn btn-primary" style="display: inline-block; text-decoration: none;">
+                🛒 Explorar Productos
+            </a>
+        </div>
+
+        <!-- Sugerencias -->
+        <div th:if="${#lists.isEmpty(favoritos)}" class="suggestions">
+            <h2 class="section-title">
+                <span>💡</span>
+                <span>¿No sabes por dónde empezar?</span>
+            </h2>
+            <div class="suggestions-grid">
+                <a th:href="@{/cliente/productos}?categoria=frutas-verduras" class="suggestion-card">
+                    <div class="suggestion-icon">🍎</div>
+                    <div class="suggestion-text">Frutas y Verduras Frescas</div>
+                </a>
+                <a th:href="@{/cliente/productos}?categoria=lacteos" class="suggestion-card">
+                    <div class="suggestion-icon">🥛</div>
+                    <div class="suggestion-text">Lácteos y Huevos</div>
+                </a>
+                <a th:href="@{/cliente/productos}?categoria=carnes" class="suggestion-card">
+                    <div class="suggestion-icon">🍖</div>
+                    <div class="suggestion-text">Carnes y Pescados</div>
+                </a>
+                <a th:href="@{/cliente/ofertas}" class="suggestion-card">
+                    <div class="suggestion-icon">🎯</div>
+                    <div class="suggestion-text">Ofertas Especiales</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efecto de navegación activa
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Animación para los botones de quitar favorito
+            const removeButtons = document.querySelectorAll('.btn-danger');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    productCard.style.transform = 'translateX(100px)';
+                    productCard.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        productCard.remove();
+                        
+                        // Actualizar contador
+                        const productCount = document.querySelectorAll('.product-card').length;
+                        const statItem = document.querySelector('.stat-item');
+                        if (statItem) {
+                            statItem.innerHTML = `<span>📊</span><span>${productCount} productos favoritos</span>`;
+                        }
+                        
+                        // Mostrar estado vacío si no hay productos
+                        if (productCount === 0) {
+                            document.querySelector('.products-grid').innerHTML = `
+                                <div class="empty-state">
+                                    <div class="empty-icon">😔</div>
+                                    <h2 class="empty-title">Aún no tienes favoritos</h2>
+                                    <p class="empty-description">
+                                        Los productos que agregues a favoritos aparecerán aquí. 
+                                        Es una forma fácil de guardar los productos que te interesan.
+                                    </p>
+                                    <a href="/cliente/productos" class="btn btn-primary" style="display: inline-block; text-decoration: none;">
+                                        🛒 Explorar Productos
+                                    </a>
+                                </div>
+                            `;
+                        }
+                    }, 300);
+                });
+            });
+
+            // Efecto hover mejorado para tarjetas
+            const cards = document.querySelectorAll('.product-card, .suggestion-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.3s ease';
+                });
+            });
+
+            // Simular funcionalidad de filtros
+            const filterBtn = document.querySelector('.filter-btn');
+            filterBtn.addEventListener('click', function() {
+                this.textContent = 'Aplicando...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.textContent = 'Filtros Aplicados!';
+                    setTimeout(() => {
+                        this.textContent = 'Aplicar Filtros';
+                        this.disabled = false;
+                    }, 1000);
+                }, 800);
+            });
+        });
+    </script>
+</body>
+</html>
