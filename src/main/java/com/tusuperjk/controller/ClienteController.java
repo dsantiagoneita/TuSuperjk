@@ -178,11 +178,11 @@ public class ClienteController {
 
         // Datos de ejemplo para tenderos
         List<Tendero> tenderos = Arrays.asList(
-                new Tendero("La Esquina", "Calle 123 #45-67", "3001234567", "laesquina@email.com"),
-                new Tendero("Mercado Fresco", "Avenida Principal #89-10", "3012345678", "mercadofresco@email.com"),
-                new Tendero("Super Vecino", "Diagonal 23 #11-22", "3023456789", "supervecino@email.com"),
-                new Tendero("Tienda Don Pedro", "Carrera 56 #78-90", "3034567890", "donpedro@email.com")
-        );
+        	    new Tendero("La Esquina", "laesquina@email.com", "3001234567", "Calle 123 #45-67", "password123"),
+        	    new Tendero("Mercado Fresco", "mercadofresco@email.com", "3012345678", "Avenida Principal #89-10", "password123"),
+        	    new Tendero("Super Vecino", "supervecino@email.com", "3023456789", "Diagonal 23 #11-22", "password123"),
+        	    new Tendero("Tienda Don Pedro", "donpedro@email.com", "3034567890", "Carrera 56 #78-90", "password123")
+        	);
 
         model.addAttribute("username", user.getFirstName());
         model.addAttribute("tenderos", tenderos);

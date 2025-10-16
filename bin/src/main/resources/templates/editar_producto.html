@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Producto</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<div class="brutal-container">
+    <header class="brutal-header">
+        <h1>✏️ Editar Producto</h1>
+    </header>
+
+    <main class="brutal-main">
+        <form th:action="@{/tendero/inventario/actualizar}" th:object="${producto}" method="post" class="form-inventario">
+            
+            <input type="hidden" th:field="*{id}">
+
+            <label>Nombre:</label>
+            <input type="text" th:field="*{nombre}" required>
+
+            <label>Cantidad:</label>
+            <input type="number" th:field="*{cantidad}" required>
+
+            <label>Precio:</label>
+            <input type="number" step="0.01" th:field="*{precio}" required>
+
+            <button type="submit" class="brutal-btn primary">💾 Guardar Cambios</button>
+            <a href="/tendero/inventario" class="brutal-btn">❌ Cancelar</a>
+        </form>
+    </main>
+</div>
+</body>
+</html>

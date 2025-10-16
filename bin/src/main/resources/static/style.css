@@ -1,0 +1,203 @@
+/* ==========================
+   TUSUPERJK - BRUTALISTA POP AZUL/BLANCO/BEIGE
+   ========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --blue: #0066ff;
+    --beige: #f5f5dc;
+    --white: #ffffff;
+    --black: #000000;
+}
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--beige);
+    color: var(--black);
+    line-height: 1.5;
+}
+
+/* CONTENEDOR */
+.brutal-container {
+    padding: 1rem;
+}
+
+/* ==========================
+   HEADER
+   ========================== */
+.brutal-header {
+    background: var(--blue);
+    color: var(--white);
+    border: 4px solid var(--black);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 6px 6px 0 var(--black);
+}
+
+.brutal-header h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 2rem;
+}
+
+/* ==========================
+   NAV
+   ========================== */
+.brutal-nav {
+    display: flex;
+    gap: 1rem;
+}
+
+.nav-item {
+    text-decoration: none;
+    color: var(--black);
+    padding: .5rem 1rem;
+    border: 3px solid var(--black);
+    font-weight: 700;
+    background: var(--white);
+    transition: all 0.2s;
+}
+
+.nav-item.active {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.nav-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 3px 3px 0 var(--black);
+}
+
+/* ==========================
+   MAIN
+   ========================== */
+.brutal-main {
+    padding: 2rem;
+}
+
+.section-title {
+    font-family: 'Anton', sans-serif;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    border-bottom: 3px solid var(--black);
+    display: inline-block;
+}
+
+/* ==========================
+   INVENTARIO
+   ========================== */
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.producto-card {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 1rem;
+    box-shadow: 5px 5px 0 var(--black);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: .8rem;
+}
+
+.producto-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.producto-header h3 {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.2rem;
+    color: var(--blue);
+}
+
+.producto-id {
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.producto-body {
+    font-size: 0.95rem;
+}
+
+.producto-actions {
+    display: flex;
+    gap: .5rem;
+}
+
+/* ==========================
+   FORMULARIO
+   ========================== */
+.form-inventario {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 1rem;
+    box-shadow: 5px 5px 0 var(--black);
+    max-width: 400px;
+    margin-top: 1rem;
+}
+
+.form-inventario label {
+    font-weight: bold;
+}
+
+.form-inventario input {
+    padding: .5rem;
+    border: 2px solid var(--black);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.form-inventario button {
+    margin-top: .5rem;
+}
+
+/* ==========================
+   BOTONES
+   ========================== */
+.brutal-btn {
+    border: 3px solid var(--black);
+    padding: .6rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+    text-align: center;
+}
+
+.brutal-btn.primary {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.brutal-btn.secondary {
+    background: var(--white);
+    color: var(--black);
+}
+
+.brutal-btn.danger {
+    background: var(--red, #ff4d4d);
+    color: var(--white);
+}
+
+.brutal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 3px 3px 0 var(--black);
+}
