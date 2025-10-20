@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Pedidos - TuSuperJK</title>
+	<link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body class="brutal-container">
+	<!-- HEADER GLOBAL -->
+	<header class="brutal-header">
+		<div class="header-content">
+			<div class="logo-section">
+				<h1>📑 PEDIDOS - TUSUPERJK</h1>
+				<p class="welcome-text" th:text="'Bienvenido, ' + ${username}">Bienvenido, Tendero</p>
+			</div>
+			<nav class="brutal-nav">
+				<a th:href="@{/tendero/homepage}" class="nav-item">🏠 Inicio</a>
+				<a th:href="@{/tendero/pedidos}" class="nav-item active">📑 Pedidos</a>
+				<a th:href="@{/tendero/inventario}" class="nav-item">📦 Inventario</a>
+				<a th:href="@{/tendero/perfil}" class="nav-item">👤 Perfil</a>
+				<a th:href="@{/logout}" class="nav-item logout-btn">🚪 Salir</a>
+			</nav>
+		</div>
+	</header>
+
+	<!-- CONTENIDO PRINCIPAL -->
+	<main class="brutal-main">
+		<!-- Mensajes de alerta -->
+		<div th:if="${mensaje}"
+			th:classappend="${tipoMensaje == 'success' ? 'alert alert-success' : 'alert alert-error'}"
+			th:text="${mensaje}">
+		</div>
+
+		<!-- RESUMEN DE PEDIDOS -->
+		<section class="resumen-pedidos">
+			<h2 class="section-title">📊 Resumen de Pedidos</h2>
+			<div class="resumen-grid">
+				<div class="resumen-card pendiente">
+					<div class="resumen-icon">⏳</div>
+					<div class="resumen-content">
+						<h3>Pendientes</h3>
+						<p class="resumen-count" th:text="${pedidosPendientes?.size() ?: 0}">0</p>
+						<p class="resumen-label">Esperando procesar</p>
+					</div>
+				</div>
+
+				<div class="resumen-card proceso">
+					<div class="resumen-icon">🔄</div>
+					<div class="resumen-content">
+						<h3>En Proceso</h3>
+						<p class="resumen-count" th:text="${pedidosEnProceso?.size() ?: 0}">0</p>
+						<p class="resumen-label">Preparando entrega</p>
+					</div>
+				</div>
+
+				<div class="resumen-card completado">
+					<div class="resumen-icon">✅</div>
+					<div class="resumen-content">
+						<h3>Completados</h3>
+						<p class="resumen-count" th:text="${pedidosCompletados?.size() ?: 0}">0</p>
+						<p class="resumen-label">Entregados hoy</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- PEDIDOS PENDIENTES -->
+		<section class="pedidos-section" th:if="${pedidosPendientes != null and not pedidosPendientes.empty}">
+			<h2 class="section-title">⏳ Pedidos Pendientes</h2>
+			<div class="pedidos-grid">
+				<div th:each="pedido : ${pedidosPendientes}" class="pedido-card pendiente">
+					<div class="pedido-header">
+						<div class="pedido-info">
+							<h3>Pedido #<span th:text="${pedido.id}">001</span></h3>
+							<span class="pedido-fecha"
+								th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2025
+								12:00</span>
+						</div>
+						<span class="estado-badge pendiente">PENDIENTE</span>
+					</div>
+
+					<div class="pedido-body">
+						<div class="cliente-info">
+							<p><strong>👤 Cliente:</strong> <span th:text="${pedido.clienteNombre}">Juan Pérez</span>
+							</p>
+							<p><strong>📞 Teléfono:</strong> <span th:text="${pedido.clienteTelefono}">3001234567</span>
+							</p>
+							<p><strong>📍 Dirección:</strong> <span th:text="${pedido.direccionEntrega}">Calle 123
+									#45-67</span></p>
+						</div>
+
+						<div class="productos-lista">
+							<h4>📦 Productos:</h4>
+							<div th:each="item : ${pedido.items}" class="producto-item">
+								<span class="producto-nombre" th:text="${item.productoNombre}">Producto</span>
+								<span class="producto-cantidad" th:text="'x' + ${item.cantidad}">x1</span>
+								<span class="producto-precio"
+									th:text="'$' + ${#numbers.formatDecimal(item.precioUnitario, 1, 2)}">$0.00</span>
+							</div>
+						</div>
+
+						<div class="pedido-total">
+							<strong>Total: $<span
+									th:text="${#numbers.formatDecimal(pedido.total, 1, 2)}">0.00</span></strong>
+						</div>
+					</div>
+
+					<div class="pedido-actions">
+						<form th:action="@{/tendero/pedidos/{id}/procesar(id=${pedido.id})}" method="post"
+							class="action-form">
+							<button type="submit" class="brutal-btn primary">🔄 Procesar Pedido</button>
+						</form>
+						<form th:action="@{/tendero/pedidos/{id}/cancelar(id=${pedido.id})}" method="post"
+							class="action-form">
+							<button type="submit" class="brutal-btn danger"
+								onclick="return confirm('¿Estás seguro de cancelar este pedido?')">❌ Cancelar</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- PEDIDOS EN PROCESO -->
+		<section class="pedidos-section" th:if="${pedidosEnProceso != null and not pedidosEnProceso.empty}">
+			<h2 class="section-title">🔄 Pedidos en Proceso</h2>
+			<div class="pedidos-grid">
+				<div th:each="pedido : ${pedidosEnProceso}" class="pedido-card proceso">
+					<div class="pedido-header">
+						<div class="pedido-info">
+							<h3>Pedido #<span th:text="${pedido.id}">001</span></h3>
+							<span class="pedido-fecha"
+								th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2025
+								12:00</span>
+						</div>
+						<span class="estado-badge proceso">EN PROCESO</span>
+					</div>
+
+					<div class="pedido-body">
+						<div class="cliente-info">
+							<p><strong>👤 Cliente:</strong> <span th:text="${pedido.clienteNombre}">Juan Pérez</span>
+							</p>
+							<p><strong>📞 Teléfono:</strong> <span th:text="${pedido.clienteTelefono}">3001234567</span>
+							</p>
+							<p><strong>📍 Dirección:</strong> <span th:text="${pedido.direccionEntrega}">Calle 123
+									#45-67</span></p>
+						</div>
+
+						<div class="productos-lista">
+							<h4>📦 Productos:</h4>
+							<div th:each="item : ${pedido.items}" class="producto-item">
+								<span class="producto-nombre" th:text="${item.productoNombre}">Producto</span>
+								<span class="producto-cantidad" th:text="'x' + ${item.cantidad}">x1</span>
+								<span class="producto-precio"
+									th:text="'$' + ${#numbers.formatDecimal(item.precioUnitario, 1, 2)}">$0.00</span>
+							</div>
+						</div>
+
+						<div class="pedido-total">
+							<strong>Total: $<span
+									th:text="${#numbers.formatDecimal(pedido.total, 1, 2)}">0.00</span></strong>
+						</div>
+					</div>
+
+					<div class="pedido-actions">
+						<form th:action="@{/tendero/pedidos/{id}/completar(id=${pedido.id})}" method="post"
+							class="action-form">
+							<button type="submit" class="brutal-btn success">✅ Marcar como Completado</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- PEDIDOS COMPLETADOS -->
+		<section class="pedidos-section" th:if="${pedidosCompletados != null and not pedidosCompletados.empty}">
+			<h2 class="section-title">✅ Pedidos Completados</h2>
+			<div class="pedidos-grid">
+				<div th:each="pedido : ${pedidosCompletados}" class="pedido-card completado">
+					<div class="pedido-header">
+						<div class="pedido-info">
+							<h3>Pedido #<span th:text="${pedido.id}">001</span></h3>
+							<span class="pedido-fecha"
+								th:text="${#temporals.format(pedido.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2025
+								12:00</span>
+						</div>
+						<span class="estado-badge completado">COMPLETADO</span>
+					</div>
+
+					<div class="pedido-body">
+						<div class="cliente-info">
+							<p><strong>👤 Cliente:</strong> <span th:text="${pedido.clienteNombre}">Juan Pérez</span>
+							</p>
+							<p><strong>📞 Teléfono:</strong> <span th:text="${pedido.clienteTelefono}">3001234567</span>
+							</p>
+							<p><strong>📍 Dirección:</strong> <span th:text="${pedido.direccionEntrega}">Calle 123
+									#45-67</span></p>
+						</div>
+
+						<div class="productos-lista">
+							<h4>📦 Productos:</h4>
+							<div th:each="item : ${pedido.items}" class="producto-item">
+								<span class="producto-nombre" th:text="${item.productoNombre}">Producto</span>
+								<span class="producto-cantidad" th:text="'x' + ${item.cantidad}">x1</span>
+								<span class="producto-precio"
+									th:text="'$' + ${#numbers.formatDecimal(item.precioUnitario, 1, 2)}">$0.00</span>
+							</div>
+						</div>
+
+						<div class="pedido-total">
+							<strong>Total: $<span
+									th:text="${#numbers.formatDecimal(pedido.total, 1, 2)}">0.00</span></strong>
+						</div>
+					</div>
+
+					<div class="pedido-actions">
+						<span class="completado-text">✅ Entregado</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ESTADO VACÍO -->
+		<div th:if="${(pedidosPendientes == null or pedidosPendientes.empty) and (pedidosEnProceso == null or pedidosEnProceso.empty) and (pedidosCompletados == null or pedidosCompletados.empty)}"
+			class="empty-state">
+			<p>📭 No hay pedidos en este momento.</p>
+			<p>Los pedidos nuevos aparecerán aquí automáticamente.</p>
+		</div>
+	</main>
+
+	<!-- FOOTER GLOBAL -->
+	<footer class="brutal-footer">
+		<div class="footer-content">
+			<p>&copy; 2025 TuSuperJK - Gestión de Pedidos</p>
+			<div class="footer-links">
+				<span>📱 v2.1.0</span>
+				<span>🕒 Actualizado: <span
+						th:text="${#temporals.format(#temporals.createNow(), 'HH:mm')}">14:26</span></span>
+			</div>
+		</div>
+	</footer>
+</body>
+
+</html>

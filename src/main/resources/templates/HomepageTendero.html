@@ -2,98 +2,193 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Dashboard - TuSuperJK</title>
-	<link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - TuSuperJK</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
 <body class="brutal-container">
-	<!-- HEADER -->
-	<header class="brutal-header">
-		<h1>TUSUPERJK</h1>
-		<nav class="brutal-nav">
-			<a th:href="@{/tendero/homepage}" class="nav-item active">🏠 Dashboard</a>
-			<a th:href="@{/tendero/pedidos}" class="nav-item">📦 Pedidos</a>
-			<a th:href="@{/tendero/inventario}" class="nav-item">📊 Stock</a>
-			<a th:href="@{/tendero/perfil}" class="nav-item">👤 Perfil</a>
-			<a th:href="@{/logout}" class="nav-item">📜 Salir</a>
-		</nav>
-	</header>
+    <!-- HEADER MEJORADO -->
+    <header class="brutal-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <h1>🏪 TUSUPERJK</h1>
+                <p class="welcome-text">Bienvenido, <span th:text="${username}">Tendero</span></p>
+            </div>
+            <nav class="brutal-nav">
+                <a th:href="@{/tendero/homepage}" class="nav-item active">🏠 Dashboard</a>
+                <a th:href="@{/tendero/pedidos}" class="nav-item">📦 Pedidos</a>
+                <a th:href="@{/tendero/inventario}" class="nav-item">📊 Stock</a>
+                <a th:href="@{/tendero/perfil}" class="nav-item">👤 Perfil</a>
+                <a th:href="@{/logout}" class="nav-item logout-btn">🚪 Salir</a>
+            </nav>
+        </div>
+    </header>
 
-	<!-- CONTENIDO PRINCIPAL -->
-	<main class="brutal-main">
-		<!-- Resumen -->
-		<!-- Resumen -->
-		<section class="stats">
-			<h2 class="section-title">📌 Resumen del Día</h2>
-			<div class="inventory-grid">
-				<!-- Tarjeta Ventas -->
-				<a th:href="@{/tendero/ventas}" class="producto-card">
-					<div class="producto-header">
-						<h3>🛒 Ventas Hoy</h3>
-						<span class="producto-id">#001</span>
-					</div>
-					<div class="producto-body">
-						<p><strong>35</strong> productos vendidos</p>
-					</div>
-				</a>
+    <!-- CONTENIDO PRINCIPAL MEJORADO -->
+    <main class="brutal-main">
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>🎯 Panel de Control</h2>
+                    <p>Gestiona tu tienda de manera eficiente</p>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-badge">
+                        <span class="stat-number">35</span>
+                        <span class="stat-label">Ventas Hoy</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-number">$450K</span>
+                        <span class="stat-label">Ingresos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-				<!-- Tarjeta Ingresos -->
-				<a th:href="@{/tendero/ingresos}" class="producto-card">
-					<div class="producto-header">
-						<h3>💰 Ingresos</h3>
-						<span class="producto-id">#002</span>
-					</div>
-					<div class="producto-body">
-						<p><strong>$450.000</strong> COP</p>
-					</div>
-				</a>
-			</div>
-		</section>
+        <!-- METRICAS EN TIEMPO REAL -->
+        <section class="metrics-section">
+            <h2 class="section-title">📈 Métricas del Día</h2>
+            <div class="metrics-grid">
+                <div class="metric-card sales">
+                    <div class="metric-icon">🛒</div>
+                    <div class="metric-content">
+                        <h3>Ventas Totales</h3>
+                        <p class="metric-value">35</p>
+                        <p class="metric-label">productos vendidos</p>
+                    </div>
+                    <div class="metric-trend positive">↗ +12%</div>
+                </div>
 
+                <div class="metric-card revenue">
+                    <div class="metric-icon">💰</div>
+                    <div class="metric-content">
+                        <h3>Ingresos</h3>
+                        <p class="metric-value">$450.000</p>
+                        <p class="metric-label">ganancias hoy</p>
+                    </div>
+                    <div class="metric-trend positive">↗ +8%</div>
+                </div>
 
-		<!-- Acciones rápidas -->
-		<section class="acciones-rapidas">
-			<h2 class="section-title">⚡ Acciones Rápidas</h2>
-			<div class="inventory-grid">
-				<div class="producto-card">
-					<div class="producto-header">
-						<h3>➕ Nuevo Producto</h3>
-					</div>
-					<div class="producto-body">
-						<p>Agregar productos al inventario</p>
-					</div>
-					<div class="producto-actions">
-						<a th:href="@{/tendero/inventario/agregar}" class="brutal-btn primary">AGREGAR</a>
-					</div>
-				</div>
+                <div class="metric-card inventory">
+                    <div class="metric-icon">📦</div>
+                    <div class="metric-content">
+                        <h3>Inventario</h3>
+                        <p class="metric-value">128</p>
+                        <p class="metric-label">productos en stock</p>
+                    </div>
+                    <div class="metric-trend negative">↘ -5%</div>
+                </div>
 
-				<div class="producto-card">
-					<div class="producto-header">
-						<h3>📋 Gestionar Pedidos</h3>
-					</div>
-					<div class="producto-body">
-						<p>Ver y actualizar estado de pedidos</p>
-					</div>
-					<div class="producto-actions">
-						<a th:href="@{/tendero/pedidos}" class="brutal-btn secondary">GESTIONAR</a>
-					</div>
-				</div>
+                <div class="metric-card orders">
+                    <div class="metric-icon">📋</div>
+                    <div class="metric-content">
+                        <h3>Pedidos</h3>
+                        <p class="metric-value">12</p>
+                        <p class="metric-label">pendientes</p>
+                    </div>
+                    <div class="metric-trend positive">↗ +3%</div>
+                </div>
+            </div>
+        </section>
 
-				<div class="producto-card">
-					<div class="producto-header">
-						<h3>📊 Reportes</h3>
-					</div>
-					<div class="producto-body">
-						<p>Visualizar estadísticas de ventas</p>
-					</div>
-					<div class="producto-actions">
-						<a th:href="@{/tendero/reportes}" class="brutal-btn secondary">VER REPORTES</a>
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
+        <!-- ACCIONES RÁPIDAS MEJORADAS -->
+        <section class="actions-section">
+            <h2 class="section-title">⚡ Acciones Rápidas</h2>
+            <div class="actions-grid">
+                <div class="action-card primary">
+                    <div class="action-icon">➕</div>
+                    <div class="action-content">
+                        <h3>Agregar Producto</h3>
+                        <p>Añade nuevos productos al inventario</p>
+                    </div>
+                    <a th:href="@{/tendero/inventario}" class="action-btn">AGREGAR</a>
+                </div>
+
+                <div class="action-card secondary">
+                    <div class="action-icon">📋</div>
+                    <div class="action-content">
+                        <h3>Gestionar Pedidos</h3>
+                        <p>Revisa y actualiza estados de pedidos</p>
+                    </div>
+                    <a th:href="@{/tendero/pedidos}" class="action-btn">VER PEDIDOS</a>
+                </div>
+
+                <div class="action-card accent">
+                    <div class="action-icon">📊</div>
+                    <div class="action-content">
+                        <h3>Ver Reportes</h3>
+                        <p>Estadísticas detalladas de ventas</p>
+                    </div>
+                    <a th:href="@{/tendero/reportes}" class="action-btn">VER REPORTES</a>
+                </div>
+
+                <div class="action-card warning">
+                    <div class="action-icon">🔔</div>
+                    <div class="action-content">
+                        <h3>Alertas</h3>
+                        <p>Productos con stock bajo</p>
+                    </div>
+                    <a th:href="@{/tendero/inventario}" class="action-btn">REVISAR</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTOS POPULARES -->
+        <section class="popular-section">
+            <h2 class="section-title">🔥 Productos Populares</h2>
+            <div class="products-scroll">
+                <div class="product-mini-card">
+                    <div class="product-mini-icon">🍚</div>
+                    <div class="product-mini-info">
+                        <h4>Arroz Diana</h4>
+                        <p>15 vendidos</p>
+                    </div>
+                    <span class="product-trend">🔥</span>
+                </div>
+
+                <div class="product-mini-card">
+                    <div class="product-mini-icon">🥫</div>
+                    <div class="product-mini-info">
+                        <h4>Atún Van Camps</h4>
+                        <p>12 vendidos</p>
+                    </div>
+                    <span class="product-trend">🔥</span>
+                </div>
+
+                <div class="product-mini-card">
+                    <div class="product-mini-icon">🍪</div>
+                    <div class="product-mini-info">
+                        <h4>Galletas Festival</h4>
+                        <p>10 vendidos</p>
+                    </div>
+                    <span class="product-trend">🔥</span>
+                </div>
+
+                <div class="product-mini-card">
+                    <div class="product-mini-icon">🧴</div>
+                    <div class="product-mini-info">
+                        <h4>Jabón Ariel</h4>
+                        <p>8 vendidos</p>
+                    </div>
+                    <span class="product-trend">🔥</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="brutal-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 TuSuperJK - Panel de Tendero</p>
+            <div class="footer-links">
+                <span>📱 v2.1.0</span>
+                <span>🕒 Actualizado hoy</span>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

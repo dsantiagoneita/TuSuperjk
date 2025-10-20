@@ -10,30 +10,28 @@ public class Producto {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(nullable = false)
 	private String nombre;
-	private double precio;
-	private int cantidad;
 
-	// Nuevo campo para la URL de la imagen
-	@Column(name = "imagen_url") // Asegúrate de que el nombre de la columna coincida con tu BD; ajusta si es
-									// necesario
+	@Column(nullable = false)
+	private Double precio;
+
+	@Column(nullable = false)
+	private Integer cantidad;
+
 	private String imagenUrl;
 
-	// Constructor vacío (actualizado para incluir el nuevo campo, aunque no es
-	// obligatorio)
 	public Producto() {
 	}
 
-	// Constructor con parámetros (actualizado para incluir imagenUrl)
-	public Producto(Long id, String nombre, double precio, int cantidad, String imagenUrl) {
-		this.id = id;
+	public Producto(String nombre, Double precio, Integer cantidad, String imagenUrl) {
 		this.nombre = nombre;
 		this.precio = precio;
 		this.cantidad = cantidad;
 		this.imagenUrl = imagenUrl;
 	}
 
-	// Getters y Setters existentes
+	// Getters y Setters
 	public Long getId() {
 		return id;
 	}
@@ -50,23 +48,22 @@ public class Producto {
 		this.nombre = nombre;
 	}
 
-	public double getPrecio() {
+	public Double getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(double precio) {
+	public void setPrecio(Double precio) {
 		this.precio = precio;
 	}
 
-	public int getCantidad() {
+	public Integer getCantidad() {
 		return cantidad;
 	}
 
-	public void setCantidad(int cantidad) {
+	public void setCantidad(Integer cantidad) {
 		this.cantidad = cantidad;
 	}
 
-	// Nuevo getter y setter para imagenUrl
 	public String getImagenUrl() {
 		return imagenUrl;
 	}

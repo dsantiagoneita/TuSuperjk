@@ -1,17 +1,29 @@
 /* ==========================
-   TUSUPERJK - BRUTALISTA POP AZUL/BLANCO/BEIGE
+   TUSUPERJK - BRUTALISMO MEJORADO
    ========================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-    --blue: #0066ff;
-    --beige: #f5f5dc;
+    --navy: #2c3e50;
+    --navy-light: #34495e;
+    --navy-dark: #1a252f;
+    --cream: #fdf6e3;
+    --cream-dark: #f0e6d2;
     --white: #ffffff;
-    --black: #000000;
+    --black: #2c3e50;
+    --gray: #7f8c8d;
+    --gray-light: #bdc3c7;
+    --green: #27ae60;
+    --red: #e74c3c;
+    --orange: #f39c12;
+    --purple: #8e44ad;
+    --blue: #3498db;
+    --shadow: 4px 4px 0 var(--black);
+    --shadow-sm: 2px 2px 0 var(--black);
+    --shadow-lg: 6px 6px 0 var(--black);
 }
 
-/* RESET */
 * {
     margin: 0;
     padding: 0;
@@ -20,170 +32,548 @@
 }
 
 body {
-    background: var(--beige);
+    background: var(--cream);
     color: var(--black);
-    line-height: 1.5;
+    line-height: 1.6;
+    min-height: 100vh;
 }
 
-/* CONTENEDOR */
+/* CONTENEDOR PRINCIPAL */
 .brutal-container {
-    padding: 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* ==========================
-   HEADER
+   HEADER GLOBAL - PARA TODAS LAS PÁGINAS
    ========================== */
 .brutal-header {
-    background: var(--blue);
+    background: var(--navy);
     color: var(--white);
-    border: 4px solid var(--black);
-    padding: 1rem;
+    border-bottom: 4px solid var(--black);
+    padding: 1rem 0;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 0;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 6px 6px 0 var(--black);
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.brutal-header h1 {
-    font-family: 'Anton', sans-serif;
-    font-size: 2rem;
+.logo-section h1 {
+    font-weight: 900;
+    font-size: 2.2rem;
+    letter-spacing: -1px;
+    margin-bottom: 0.25rem;
 }
 
-/* ==========================
-   NAV
-   ========================== */
+.welcome-text {
+    font-weight: 600;
+    color: var(--cream);
+    font-size: 0.95rem;
+}
+
+/* NAVEGACIÓN GLOBAL */
 .brutal-nav {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
 .nav-item {
     text-decoration: none;
     color: var(--black);
-    padding: .5rem 1rem;
+    padding: 0.75rem 1.25rem;
     border: 3px solid var(--black);
     font-weight: 700;
     background: var(--white);
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    border-radius: 2px;
 }
 
 .nav-item.active {
-    background: var(--blue);
+    background: var(--orange);
     color: var(--white);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
 .nav-item:hover {
     transform: translateY(-3px);
-    box-shadow: 3px 3px 0 var(--black);
+    box-shadow: var(--shadow);
 }
 
-/* ==========================
-   MAIN
-   ========================== */
+.logout-btn {
+    background: var(--red);
+    color: var(--white);
+}
+
+/* CONTENIDO PRINCIPAL GLOBAL */
 .brutal-main {
+    flex: 1;
+    max-width: 1400px;
+    margin: 0 auto;
     padding: 2rem;
+    width: 100%;
 }
 
 .section-title {
-    font-family: 'Anton', sans-serif;
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
     border-bottom: 3px solid var(--black);
     display: inline-block;
+    padding-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
 }
 
 /* ==========================
-   INVENTARIO
+   ESTILOS ESPECÍFICOS DEL HOMEPAGE
    ========================== */
-.inventory-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
+
+/* HERO SECTION - SOLO HOMEPAGE */
+.hero-section {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    border: 4px solid var(--black);
+    padding: 3rem 2rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+    color: var(--white);
 }
 
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.hero-text h2 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.hero-text p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.stat-badge {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--white);
+    padding: 1rem 1.5rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 900;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 600;
+}
+
+/* METRICAS SECTION - SOLO HOMEPAGE */
+.metrics-section {
+    margin-bottom: 3rem;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.metric-card.sales {
+    border-left: 6px solid var(--green);
+}
+
+.metric-card.revenue {
+    border-left: 6px solid var(--blue);
+}
+
+.metric-card.inventory {
+    border-left: 6px solid var(--purple);
+}
+
+.metric-card.orders {
+    border-left: 6px solid var(--orange);
+}
+
+.metric-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+}
+
+.metric-content {
+    flex: 1;
+}
+
+.metric-content h3 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.metric-value {
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 600;
+}
+
+.metric-trend {
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid var(--black);
+}
+
+.metric-trend.positive {
+    background: var(--green);
+    color: var(--white);
+}
+
+.metric-trend.negative {
+    background: var(--red);
+    color: var(--white);
+}
+
+/* ACCIONES SECTION - SOLO HOMEPAGE */
+.actions-section {
+    margin-bottom: 3rem;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.action-card {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.action-card:hover {
+    transform: translateY(-5px) rotate(1deg);
+    box-shadow: var(--shadow-lg);
+}
+
+.action-card.primary {
+    border-color: var(--blue);
+    background: linear-gradient(135deg, var(--white) 0%, #e3f2fd 100%);
+}
+
+.action-card.secondary {
+    border-color: var(--green);
+    background: linear-gradient(135deg, var(--white) 0%, #e8f5e8 100%);
+}
+
+.action-card.accent {
+    border-color: var(--purple);
+    background: linear-gradient(135deg, var(--white) 0%, #f3e5f5 100%);
+}
+
+.action-card.warning {
+    border-color: var(--orange);
+    background: linear-gradient(135deg, var(--white) 0%, #fff3e0 100%);
+}
+
+.action-icon {
+    font-size: 3rem;
+    text-align: center;
+}
+
+.action-content {
+    flex: 1;
+    text-align: center;
+}
+
+.action-content h3 {
+    font-weight: 800;
+    font-size: 1.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.action-content p {
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.action-btn {
+    display: block;
+    text-align: center;
+    padding: 1rem 2rem;
+    background: var(--black);
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 800;
+    border: 2px solid var(--black);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.action-btn:hover {
+    background: var(--white);
+    color: var(--black);
+    transform: scale(1.05);
+}
+
+/* POPULAR SECTION - SOLO HOMEPAGE */
+.popular-section {
+    margin-bottom: 3rem;
+}
+
+.products-scroll {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.product-mini-card {
+    background: var(--white);
+    border: 2px solid var(--black);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.product-mini-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    background: var(--cream-dark);
+}
+
+.product-mini-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.product-mini-info {
+    flex: 1;
+}
+
+.product-mini-info h4 {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.product-mini-info p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.product-trend {
+    font-size: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* ==========================
+   ESTILOS ESPECÍFICOS DEL INVENTARIO
+   ========================== */
+
+/* GRID DE INVENTARIO - FUNCIONAL */
+.inventory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+/* TARJETAS DE PRODUCTO - CLARAS Y FUNCIONALES */
 .producto-card {
     background: var(--white);
     border: 3px solid var(--black);
-    padding: 1rem;
-    box-shadow: 5px 5px 0 var(--black);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: .8rem;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.producto-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    background: var(--cream-dark);
 }
 
 .producto-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    border-bottom: 2px solid var(--gray-light);
+    padding-bottom: 0.75rem;
 }
 
 .producto-header h3 {
-    font-family: 'Anton', sans-serif;
-    font-size: 1.2rem;
-    color: var(--blue);
+    font-weight: 800;
+    color: var(--navy);
+    margin-right: 1rem;
+    font-size: 1.3rem;
 }
 
 .producto-id {
-    font-size: 0.9rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--cream);
+    padding: 0.4rem 0.75rem;
+    border: 2px solid var(--black);
+    font-weight: 700;
 }
 
 .producto-body {
-    font-size: 0.95rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.producto-body p {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.producto-body strong {
+    color: var(--navy);
 }
 
 .producto-actions {
     display: flex;
-    gap: .5rem;
-}
-
-/* ==========================
-   FORMULARIO
-   ========================== */
-.form-inventario {
-    display: flex;
-    flex-direction: column;
-    gap: .7rem;
-    background: var(--white);
-    border: 3px solid var(--black);
-    padding: 1rem;
-    box-shadow: 5px 5px 0 var(--black);
-    max-width: 400px;
+    gap: 0.75rem;
     margin-top: 1rem;
 }
 
+/* FORMULARIO DE INVENTARIO - CLARO Y ORGANIZADO */
+.form-section {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+    margin-top: 2rem;
+}
+
+.form-inventario {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .form-inventario label {
-    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 1.1rem;
 }
 
 .form-inventario input {
-    padding: .5rem;
+    width: 100%;
+    padding: 1rem;
     border: 2px solid var(--black);
-    font-family: 'JetBrains Mono', monospace;
+    background: var(--cream);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-.form-inventario button {
-    margin-top: .5rem;
+.form-inventario input:focus {
+    outline: none;
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+    border-color: var(--navy);
 }
 
-/* ==========================
-   BOTONES
-   ========================== */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* BOTONES GLOBALES - CONSISTENTES */
 .brutal-btn {
     border: 3px solid var(--black);
-    padding: .6rem 1rem;
-    cursor: pointer;
-    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
     display: inline-block;
     text-align: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    flex: 1;
 }
 
 .brutal-btn.primary {
-    background: var(--blue);
+    background: var(--navy);
     color: var(--white);
 }
 
@@ -193,11 +583,501 @@ body {
 }
 
 .brutal-btn.danger {
-    background: var(--red, #ff4d4d);
+    background: var(--red);
     color: var(--white);
 }
 
 .brutal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* MENSAJES DE ALERTA - PARA TODAS LAS PÁGINAS */
+.alert {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    border: 3px solid var(--black);
+    box-shadow: var(--shadow);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.alert-success {
+    background: var(--green);
+    color: var(--white);
+}
+
+.alert-error {
+    background: var(--red);
+    color: var(--white);
+}
+
+/* ESTADO VACÍO - PARA INVENTARIO */
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--white);
+    border: 3px solid var(--black);
+    box-shadow: var(--shadow);
+    margin: 2rem 0;
+}
+
+.empty-state p {
+    font-size: 1.2rem;
+    color: var(--gray);
+    font-weight: 600;
+}
+
+/* ==========================
+   FOOTER GLOBAL - PARA TODAS LAS PÁGINAS
+   ========================== */
+.brutal-footer {
+    background: var(--navy-dark);
+    color: var(--white);
+    border-top: 4px solid var(--black);
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-links span {
+    font-weight: 600;
+    opacity: 0.8;
+}
+
+/* ==========================
+   RESPONSIVE DESIGN MEJORADO
+   ========================== */
+
+@media (max-width: 1024px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-stats {
+        justify-content: center;
+    }
+    
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .inventory-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 0 1rem;
+    }
+
+    .brutal-nav {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .nav-item {
+        flex: 1;
+        text-align: center;
+        min-width: 120px;
+    }
+
+    .brutal-main {
+        padding: 1.5rem;
+    }
+
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+
+    .hero-text h2 {
+        font-size: 2rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metric-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .producto-actions {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .form-section {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-text h2 {
+        font-size: 1.8rem;
+    }
+
+    .stat-badge {
+        padding: 0.75rem 1rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+
+    .metric-value {
+        font-size: 1.8rem;
+    }
+
+    .action-card {
+        padding: 1.5rem;
+    }
+
+    .producto-header {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+}
+
+/* UTILIDADES */
+.text-center {
+    text-align: center;
+}
+
+.mb-2 {
+    margin-bottom: 2rem;
+}
+
+.mt-2 {
+    margin-top: 2rem;
+}
+/* ==========================
+   ESTILOS ESPECÍFICOS DE PEDIDOS
+   ========================== */
+
+/* RESUMEN DE PEDIDOS */
+.resumen-pedidos {
+    margin-bottom: 3rem;
+}
+
+.resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.resumen-card {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.resumen-card:hover {
     transform: translateY(-3px);
-    box-shadow: 3px 3px 0 var(--black);
+    box-shadow: var(--shadow-lg);
+}
+
+.resumen-card.pendiente {
+    border-left: 6px solid var(--orange);
+}
+
+.resumen-card.proceso {
+    border-left: 6px solid var(--blue);
+}
+
+.resumen-card.completado {
+    border-left: 6px solid var(--green);
+}
+
+.resumen-icon {
+    font-size: 3rem;
+    flex-shrink: 0;
+}
+
+.resumen-content h3 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.resumen-count {
+    font-size: 2.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.resumen-label {
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 600;
+}
+
+/* GRID DE PEDIDOS */
+.pedidos-section {
+    margin-bottom: 3rem;
+}
+
+.pedidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+/* TARJETAS DE PEDIDO */
+.pedido-card {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.pedido-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.pedido-card.pendiente {
+    border-left: 6px solid var(--orange);
+    background: linear-gradient(135deg, var(--white) 0%, #fff3e0 100%);
+}
+
+.pedido-card.proceso {
+    border-left: 6px solid var(--blue);
+    background: linear-gradient(135deg, var(--white) 0%, #e3f2fd 100%);
+}
+
+.pedido-card.completado {
+    border-left: 6px solid var(--green);
+    background: linear-gradient(135deg, var(--white) 0%, #e8f5e8 100%);
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid var(--gray-light);
+    padding-bottom: 0.75rem;
+}
+
+.pedido-info h3 {
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 0.25rem;
+    font-size: 1.3rem;
+}
+
+.pedido-fecha {
+    font-size: 0.9rem;
+    color: var(--gray);
+    font-weight: 600;
+}
+
+.estado-badge {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--black);
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.estado-badge.pendiente {
+    background: var(--orange);
+    color: var(--white);
+}
+
+.estado-badge.proceso {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.estado-badge.completado {
+    background: var(--green);
+    color: var(--white);
+}
+
+.pedido-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cliente-info p {
+    margin: 0.25rem 0;
+    font-weight: 600;
+}
+
+.cliente-info strong {
+    color: var(--navy);
+}
+
+.productos-lista h4 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--navy);
+}
+
+.producto-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--gray-light);
+}
+
+.producto-item:last-child {
+    border-bottom: none;
+}
+
+.producto-nombre {
+    flex: 1;
+    font-weight: 600;
+}
+
+.producto-cantidad {
+    margin: 0 1rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+.producto-precio {
+    font-weight: 700;
+    color: var(--green);
+}
+
+.pedido-total {
+    text-align: right;
+    padding-top: 0.5rem;
+    border-top: 2px solid var(--black);
+    font-size: 1.2rem;
+}
+
+.pedido-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.action-form {
+    flex: 1;
+}
+
+.completado-text {
+    flex: 1;
+    text-align: center;
+    font-weight: 800;
+    color: var(--green);
+    font-size: 1.1rem;
+}
+
+/* BOTÓN SUCCESS ADICIONAL */
+.brutal-btn.success {
+    background: var(--green);
+    color: var(--white);
+}
+
+.brutal-btn.success:hover {
+    background: var(--white);
+    color: var(--green);
+}
+
+/* RESPONSIVE PARA PEDIDOS */
+@media (max-width: 768px) {
+    .resumen-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pedidos-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pedido-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .pedido-actions {
+        flex-direction: column;
+    }
+
+    .producto-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .producto-cantidad, .producto-precio {
+        margin: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .resumen-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .resumen-icon {
+        font-size: 2.5rem;
+    }
 }

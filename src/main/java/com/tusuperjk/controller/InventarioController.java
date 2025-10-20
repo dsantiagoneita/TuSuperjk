@@ -1,54 +1,103 @@
 package com.tusuperjk.controller;
 
 import com.tusuperjk.model.Producto;
+import com.tusuperjk.model.User;
 import com.tusuperjk.repository.ProductoRepository;
+import com.tusuperjk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
-@RequestMapping("/tendero/inventario") // todas las rutas de inventario quedan bajo /tendero/inventario
+@RequestMapping("/tendero/inventario")
 public class InventarioController {
 
 	@Autowired
 	private ProductoRepository productoRepository;
 
-	// Mostrar lista de productos en inventario
-	@GetMapping
-	public String mostrarInventario(Model model) {
-		model.addAttribute("productos", productoRepository.findAll());
-		model.addAttribute("productoNuevo", new Producto()); // para el form de agregar
-		return "inventario_tendero"; // tu HTML en templates
+	@Autowired
+	private UserRepository userRepository;
+
+	@GetMapping("")
+	public String mostrarInventario(Authentication authentication, Model model) {
+		String username = authentication.getName();
+		User user = userRepository.findByEmail(username)
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+		List<Producto> productos = productoRepository.findAll();
+
+		model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+		model.addAttribute("productos", productos);
+		model.addAttribute("productoNuevo", new Producto());
+
+		return "inventario_tendero";
 	}
 
-	// Agregar producto al inventario
 	@PostMapping("/agregar")
-	public String agregarProducto(Producto producto) {
-		productoRepository.save(producto);
-		return "redirect:/tendero/inventario"; // recarga lista después de guardar
-	}
+	public String agregarProducto(@ModelAttribute Producto productoNuevo, Authentication authentication,
+			RedirectAttributes redirectAttributes) {
+		try {
+			productoRepository.save(productoNuevo);
+			redirectAttributes.addFlashAttribute("mensaje", "✅ Producto agregado exitosamente");
+			redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("mensaje", "❌ Error al agregar producto");
+			redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+		}
 
-	// Editar producto (cargar formulario)
-	@GetMapping("/editar/{id}")
-	public String editarProducto(@PathVariable Long id, Model model) {
-		Producto producto = productoRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("ID inválido: " + id));
-		model.addAttribute("producto", producto);
-		return "editar_producto"; // vista nueva
-	}
-
-	// Actualizar producto (guardar cambios)
-	@PostMapping("/actualizar")
-	public String actualizarProducto(Producto producto) {
-		productoRepository.save(producto); // save hace update si ya existe
 		return "redirect:/tendero/inventario";
 	}
 
-	// Eliminar producto
+	@GetMapping("/editar/{id}")
+	public String mostrarEditarProducto(@PathVariable Long id, Authentication authentication, Model model) {
+		String username = authentication.getName();
+		User user = userRepository.findByEmail(username)
+				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+		Optional<Producto> producto = productoRepository.findById(id);
+
+		if (producto.isPresent()) {
+			model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
+			model.addAttribute("producto", producto.get());
+			return "editar_producto";
+		} else {
+			return "redirect:/tendero/inventario";
+		}
+	}
+
+	@PostMapping("/actualizar")
+	public String actualizarProducto(@ModelAttribute Producto producto, Authentication authentication,
+			RedirectAttributes redirectAttributes) {
+		try {
+			productoRepository.save(producto);
+			redirectAttributes.addFlashAttribute("mensaje", "✅ Producto actualizado exitosamente");
+			redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("mensaje", "❌ Error al actualizar producto");
+			redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+		}
+
+		return "redirect:/tendero/inventario";
+	}
+
 	@GetMapping("/eliminar/{id}")
-	public String eliminarProducto(@PathVariable Long id) {
-		productoRepository.deleteById(id);
+	public String eliminarProducto(@PathVariable Long id, Authentication authentication,
+			RedirectAttributes redirectAttributes) {
+		try {
+			productoRepository.deleteById(id);
+			redirectAttributes.addFlashAttribute("mensaje", "✅ Producto eliminado exitosamente");
+			redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+		} catch (Exception e) {
+			redirectAttributes.addFlashAttribute("mensaje", "❌ Error al eliminar producto");
+			redirectAttributes.addFlashAttribute("tipoMensaje", "error");
+		}
+
 		return "redirect:/tendero/inventario";
 	}
 }
