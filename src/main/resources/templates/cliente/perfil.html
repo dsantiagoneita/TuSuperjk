@@ -6,31 +6,158 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Mi Perfil - TuSuperJK</title>
 	<style>
+		:root {
+			--pastel-cream: #FFF8F0;
+			--pastel-mint: #E0F2E9;
+			--pastel-lavender: #E8E0F2;
+			--pastel-coral: #FFD6CC;
+			--pastel-blue: #CCE2FF;
+			--pastel-yellow: #FFF2CC;
+			--black: #1A1A1A;
+			--gray: #4A4A4A;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+		}
+
+		body {
+			background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+			min-height: 100vh;
+		}
+
+		.navbar {
+			background: rgba(255, 255, 255, 0.95);
+			border-bottom: 3px solid var(--black);
+			padding: 1rem 2rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		.brand {
+			font-size: 1.5rem;
+			font-weight: 900;
+			color: var(--black);
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		.user-badge {
+			background: var(--pastel-lavender);
+			padding: 0.5rem 1rem;
+			border: 2px solid var(--black);
+			font-weight: 700;
+		}
+
+		.logout-btn {
+			background: var(--pastel-coral);
+			border: 2px solid var(--black);
+			padding: 0.5rem 1rem;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+
+		.logout-btn:hover {
+			transform: translate(-2px, -2px);
+			box-shadow: 4px 4px 0 var(--black);
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 2rem auto;
+			padding: 0 2rem;
+		}
+
+		.back-btn {
+			display: inline-block;
+			background: var(--pastel-mint);
+			border: 2px solid var(--black);
+			padding: 0.75rem 1.5rem;
+			font-weight: 700;
+			text-decoration: none;
+			color: var(--black);
+			margin-bottom: 2rem;
+			transition: all 0.2s ease;
+		}
+
+		.back-btn:hover {
+			transform: translate(-2px, -2px);
+			box-shadow: 4px 4px 0 var(--black);
+		}
+
+		.page-title {
+			font-size: 2.5rem;
+			font-weight: 900;
+			color: var(--black);
+			margin-bottom: 2rem;
+			text-align: center;
+		}
+
 		.profile-card {
 			background: white;
 			border: 3px solid var(--black);
 			padding: 3rem;
 			box-shadow: 12px 12px 0 var(--black);
-			max-width: 600px;
+			max-width: 700px;
 			margin: 0 auto;
+		}
+
+		.profile-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 6px;
+			background: linear-gradient(90deg,
+					var(--pastel-coral) 0%,
+					var(--pastel-blue) 50%,
+					var(--pastel-mint) 100%);
 		}
 
 		.profile-header {
 			text-align: center;
-			margin-bottom: 2rem;
+			margin-bottom: 2.5rem;
+			padding-bottom: 2rem;
+			border-bottom: 3px solid var(--pastel-cream);
 		}
 
 		.profile-avatar {
-			width: 100px;
-			height: 100px;
+			width: 120px;
+			height: 120px;
 			border-radius: 50%;
-			border: 3px solid var(--black);
+			border: 4px solid var(--black);
 			background: var(--pastel-lavender);
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			font-size: 2.5rem;
+			font-size: 3rem;
+			font-weight: 900;
 			margin: 0 auto 1rem;
+			color: var(--black);
+			box-shadow: 6px 6px 0 var(--black);
+		}
+
+		.profile-header h2 {
+			font-size: 2rem;
+			font-weight: 900;
+			color: var(--black);
+			margin-bottom: 0.5rem;
+		}
+
+		.profile-header p {
+			color: var(--gray);
+			font-weight: 600;
 		}
 
 		.profile-info {
@@ -40,7 +167,7 @@
 
 		.info-group {
 			display: grid;
-			grid-template-columns: 1fr 2fr;
+			grid-template-columns: 140px 1fr;
 			align-items: center;
 			gap: 1rem;
 		}
@@ -50,30 +177,115 @@
 			color: var(--black);
 			text-transform: uppercase;
 			letter-spacing: 0.05em;
-			font-size: 0.9rem;
+			font-size: 0.85rem;
 		}
 
 		.info-value {
-			padding: 0.75rem 1rem;
+			padding: 0.85rem 1.2rem;
 			border: 2px solid var(--black);
 			background: var(--pastel-cream);
-			font-weight: 500;
+			font-weight: 600;
+			color: var(--black);
+		}
+
+		.role-badge {
+			display: inline-block;
+			padding: 0.5rem 1rem;
+			border: 2px solid var(--black);
+			background: var(--pastel-yellow);
+			font-weight: 700;
+			text-transform: uppercase;
+			font-size: 0.9rem;
+		}
+
+		.status-badge {
+			display: inline-block;
+			padding: 0.5rem 1rem;
+			border: 2px solid var(--black);
+			font-weight: 700;
+			text-transform: uppercase;
+			font-size: 0.9rem;
+		}
+
+		.status-active {
+			background: var(--pastel-mint);
+			color: var(--black);
+		}
+
+		.status-inactive {
+			background: var(--pastel-coral);
+			color: var(--black);
 		}
 
 		.btn-edit {
 			background: var(--pastel-blue);
-			border: 2px solid var(--black);
-			padding: 1rem 2rem;
-			font-weight: 700;
+			border: 3px solid var(--black);
+			padding: 1.1rem 2rem;
+			font-weight: 800;
 			cursor: pointer;
 			transition: all 0.2s ease;
 			width: 100%;
-			margin-top: 1rem;
+			margin-top: 2rem;
+			font-size: 1.1rem;
 		}
 
 		.btn-edit:hover {
-			transform: translate(-2px, -2px);
+			transform: translate(-3px, -3px);
+			box-shadow: 6px 6px 0 var(--black);
+		}
+
+		.stats-row {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1rem;
+			margin-top: 2rem;
+			padding-top: 2rem;
+			border-top: 3px solid var(--pastel-cream);
+		}
+
+		.stat-box {
+			background: var(--pastel-mint);
+			border: 2px solid var(--black);
+			padding: 1.5rem;
+			text-align: center;
 			box-shadow: 4px 4px 0 var(--black);
+		}
+
+		.stat-box:nth-child(2) {
+			background: var(--pastel-lavender);
+		}
+
+		.stat-box:nth-child(3) {
+			background: var(--pastel-coral);
+		}
+
+		.stat-number {
+			font-size: 2rem;
+			font-weight: 900;
+			color: var(--black);
+			margin-bottom: 0.5rem;
+		}
+
+		.stat-label {
+			font-size: 0.85rem;
+			font-weight: 700;
+			color: var(--gray);
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		@media (max-width: 768px) {
+			.info-group {
+				grid-template-columns: 1fr;
+			}
+
+			.stats-row {
+				grid-template-columns: 1fr;
+			}
+
+			.profile-card {
+				padding: 2rem 1.5rem;
+			}
 		}
 	</style>
 </head>
@@ -93,45 +305,75 @@
 
 	<div class="container">
 		<a th:href="@{/cliente/dashboard}" class="back-btn">← Volver al Dashboard</a>
-		<h1 class="page-title">Mi Perfil</h1>
+		<h1 class="page-title">👤 Mi Perfil</h1>
 
 		<div class="profile-card">
 			<div class="profile-header">
 				<div class="profile-avatar">
-					<span th:text="${user.firstName.substring(0,1) + user.lastName.substring(0,1)}"></span>
+					<span th:text="${user.firstName.substring(0,1) + user.lastName.substring(0,1)}">AB</span>
 				</div>
-				<h2 th:text="${user.firstName + ' ' + user.lastName}"></h2>
-				<p th:text="'Cliente desde: ' + ${#temporals.format(user.createdAt, 'dd/MM/yyyy')}"></p>
+				<h2 th:text="${user.firstName + ' ' + user.lastName}">Nombre Completo</h2>
+				<p th:if="${user.createdAt != null}"
+					th:text="'Cliente desde: ' + ${#temporals.format(user.createdAt, 'dd/MM/yyyy')}">
+					Cliente desde: 01/01/2024
+				</p>
+				<p th:unless="${user.createdAt != null}">Cliente desde: Hoy</p>
 			</div>
 
 			<div class="profile-info">
 				<div class="info-group">
-					<div class="info-label">Nombre</div>
-					<div class="info-value" th:text="${user.firstName}"></div>
+					<div class="info-label">📝 Nombre</div>
+					<div class="info-value" th:text="${user.firstName}">Nombre</div>
 				</div>
 
 				<div class="info-group">
-					<div class="info-label">Apellido</div>
-					<div class="info-value" th:text="${user.lastName}"></div>
+					<div class="info-label">📝 Apellido</div>
+					<div class="info-value" th:text="${user.lastName}">Apellido</div>
 				</div>
 
 				<div class="info-group">
-					<div class="info-label">Email</div>
-					<div class="info-value" th:text="${user.email}"></div>
+					<div class="info-label">📧 Email</div>
+					<div class="info-value" th:text="${user.email}">email@ejemplo.com</div>
 				</div>
 
 				<div class="info-group">
-					<div class="info-label">Rol</div>
-					<div class="info-value" th:text="${user.role}"></div>
+					<div class="info-label">👥 Rol</div>
+					<div>
+						<span class="role-badge" th:text="${user.role}">CLIENTE</span>
+					</div>
 				</div>
 
 				<div class="info-group">
-					<div class="info-label">Estado</div>
-					<div class="info-value" th:text="${user.enabled ? 'Activo' : 'Inactivo'}"></div>
+					<div class="info-label">✅ Estado</div>
+					<div>
+						<span th:class="${user.enabled ? 'status-badge status-active' : 'status-badge status-inactive'}"
+							th:text="${user.enabled ? '✓ Activo' : '✗ Inactivo'}">
+							✓ Activo
+						</span>
+					</div>
 				</div>
 			</div>
 
-			<button class="btn-edit">✏️ Editar Perfil</button>
+			<!-- Estadísticas rápidas 
+			<div class="stats-row">
+				<div class="stat-box">
+					<div class="stat-number">12</div>
+					<div class="stat-label">Pedidos</div>
+				</div>
+				<div class="stat-box">
+					<div class="stat-number">8</div>
+					<div class="stat-label">Favoritos</div>
+				</div>
+				<div class="stat-box">
+					<div class="stat-number">$145K</div>
+					<div class="stat-label">Total Gastado</div>
+				</div>
+			</div>
+			-->
+
+			<button class="btn-edit" onclick="alert('Funcionalidad de edición próximamente')">
+				✏️ Editar Perfil
+			</button>
 		</div>
 	</div>
 </body>

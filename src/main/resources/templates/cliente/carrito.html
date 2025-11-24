@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Carrito - TuSuperJK</title>
+    <style>
+        :root {
+            --pastel-cream: #FFF8F0;
+            --pastel-mint: #E0F2E9;
+            --pastel-lavender: #E8E0F2;
+            --pastel-coral: #FFD6CC;
+            --pastel-blue: #CCE2FF;
+            --pastel-yellow: #FFF2CC;
+            --black: #1A1A1A;
+            --gray: #4A4A4A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 3px solid var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--black);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-badge {
+            background: var(--pastel-lavender);
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: var(--pastel-mint);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--black);
+            margin-bottom: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .empty-cart {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--black);
+            margin: 2rem 0;
+        }
+
+        .empty-cart-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .empty-cart-text {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+        }
+
+        .shop-btn {
+            display: inline-block;
+            background: var(--pastel-blue);
+            border: 2px solid var(--black);
+            padding: 1rem 2rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--black);
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+
+        .shop-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .cart-items {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+            margin-bottom: 2rem;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 1fr auto auto auto;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--pastel-cream);
+            align-items: center;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid var(--black);
+        }
+
+        .item-details h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .item-details p {
+            color: var(--gray);
+        }
+
+        .item-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .qty-btn {
+            background: var(--pastel-lavender);
+            border: 2px solid var(--black);
+            width: 35px;
+            height: 35px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .qty-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 3px 3px 0 var(--black);
+        }
+
+        .qty-number {
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .cart-summary {
+            background: var(--pastel-yellow);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 2px solid var(--black);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .summary-label {
+            font-weight: 700;
+        }
+
+        .summary-value {
+            font-weight: 700;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--pastel-mint);
+            border: 3px solid var(--black);
+            padding: 1.25rem;
+            font-weight: 800;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 1.5rem;
+        }
+
+        .checkout-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        @media (max-width: 768px) {
+            .cart-item {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .item-quantity {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="brand">🛒 TuSuperJK - Mi Carrito</div>
+        <div class="user-info">
+            <div class="user-badge">
+                👋 Hola, <span th:text="${username}"></span>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a th:href="@{/cliente/dashboard}" class="back-btn">← Volver al Dashboard</a>
+        <h1 class="page-title">🛒 Mi Carrito de Compras</h1>
+
+        <!-- Empty Cart -->
+        <div class="empty-cart" th:if="${carrito.isEmpty()}">
+            <div class="empty-cart-icon">🛒</div>
+            <h2 class="empty-cart-title">Tu carrito está vacío</h2>
+            <p class="empty-cart-text">
+                ¡Aún no has agregado ningún producto! Explora nuestro catálogo y encuentra los mejores productos frescos
+                y de calidad.
+            </p>
+            <a th:href="@{/cliente/productos}" class="shop-btn">🛍️ Ir a Comprar</a>
+        </div>
+
+        <!-- Cart with items -->
+        <div th:unless="${carrito.isEmpty()}">
+            <div class="cart-items">
+                <div class="cart-item" th:each="item : ${carrito}">
+                    <img th:if="${item.imagenUrl}" th:src="${item.imagenUrl}" alt="Producto" class="item-image">
+                    <img th:unless="${item.imagenUrl}" src="https://via.placeholder.com/100?text=Producto"
+                        alt="Producto" class="item-image">
+
+                    <div class="item-details">
+                        <h3 th:text="${item.nombre}">Nombre del Producto</h3>
+                        <p th:text="'Precio unitario: $' + ${#numbers.formatDecimal(item.precio, 1, 2)}"></p>
+                    </div>
+
+                    <div class="item-price" th:text="'$' + ${#numbers.formatDecimal(item.precio, 1, 2)}"></div>
+
+                    <div class="item-quantity">
+                        <button class="qty-btn">-</button>
+                        <span class="qty-number">1</span>
+                        <button class="qty-btn">+</button>
+                    </div>
+
+                    <button class="remove-btn">🗑️ Eliminar</button>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal:</span>
+                    <span class="summary-value" th:text="'$' + ${#numbers.formatDecimal(total, 1, 2)}">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Envío:</span>
+                    <span class="summary-value">$5.000</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">IVA (19%):</span>
+                    <span class="summary-value"
+                        th:text="'$' + ${#numbers.formatDecimal(total * 0.19, 1, 2)}">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">TOTAL:</span>
+                    <span class="summary-value"
+                        th:text="'$' + ${#numbers.formatDecimal(total * 1.19 + 5000, 1, 2)}">$0.00</span>
+                </div>
+                <button class="checkout-btn">💳 Proceder al Pago</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

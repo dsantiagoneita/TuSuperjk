@@ -1,7 +1,7 @@
 package com.tusuperjk.controller;
 
 import com.tusuperjk.model.User;
-import com.tusuperjk.repository.UserRepository;
+import com.tusuperjk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TenderoController {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userService;
 
 	@GetMapping("/dashboard")
 	public String tenderoDashboard(Authentication authentication, Model model) {
 		String username = authentication.getName();
-		User user = userRepository.findByEmail(username)
+		User user = userService.findByEmail(username)
 				.orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
 		model.addAttribute("username", user.getFirstName() + " " + user.getLastName());
@@ -27,6 +27,6 @@ public class TenderoController {
 		model.addAttribute("email", user.getEmail());
 
 		// Redirigir a tu página existente de tendero
-		return "HomepageTendero"; // o el nombre de tu template existente
+		return "tendero/dashboard"; // o el nombre de tu template existente
 	}
 }
