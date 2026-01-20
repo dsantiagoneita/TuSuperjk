@@ -7,19 +7,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class HomeController {
 
-	@GetMapping("/")
-	public String home() {
-		return "redirect:/tendero/homepage";
-	}
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/login";
+    }
 
-	@GetMapping("/error")
-	public String error() {
-		return "error";
-	}
+    @GetMapping("/error")
+    public String error() {
+        return "error";
+    }
 
-	@GetMapping("/test")
-	@ResponseBody
-	public String test() {
-		return "CONTROLADORES FUNCIONANDO - SPRING DETECTA LAS RUTAS";
-	}
+    @GetMapping("/test")
+    @ResponseBody
+    public String test() {
+        return "CONTROLADORES FUNCIONANDO - SPRING DETECTA LAS RUTAS";
+    }
 }

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Registro | TuSuperJK</title>
+	<style>
+		:root {
+			--pastel-cream: #FFF8F0;
+			--pastel-mint: #E0F2E9;
+			--pastel-lavender: #E8E0F2;
+			--pastel-coral: #FFD6CC;
+			--pastel-blue: #CCE2FF;
+			--black: #1A1A1A;
+			--gray: #4A4A4A;
+			--success: #4CAF50;
+			--error: #FF6B6B;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+		}
+
+		body {
+			background: linear-gradient(135deg, var(--pastel-mint) 0%, var(--pastel-lavender) 100%);
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 2rem;
+		}
+
+		.register-container {
+			background: rgba(255, 255, 255, 0.95);
+			border: 3px solid var(--black);
+			border-radius: 0;
+			padding: 3rem 2.5rem;
+			width: 100%;
+			max-width: 520px;
+			box-shadow: 12px 12px 0 var(--black);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.register-container::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 8px;
+			background: linear-gradient(90deg,
+					var(--pastel-blue) 0%,
+					var(--pastel-coral) 25%,
+					var(--pastel-lavender) 50%,
+					var(--pastel-mint) 75%,
+					var(--pastel-blue) 100%);
+		}
+
+		.brand-header {
+			text-align: center;
+			margin-bottom: 2rem;
+		}
+
+		.brand-title {
+			font-size: 2.5rem;
+			font-weight: 900;
+			color: var(--black);
+			letter-spacing: -0.02em;
+			margin-bottom: 0.5rem;
+			text-transform: uppercase;
+		}
+
+		.brand-subtitle {
+			font-size: 1.1rem;
+			color: var(--gray);
+			font-weight: 500;
+		}
+
+		.alert {
+			padding: 1rem 1.25rem;
+			margin-bottom: 1.5rem;
+			border: 2px solid var(--black);
+			background: var(--pastel-coral);
+			font-weight: 600;
+			border-radius: 0;
+		}
+
+		.form-grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.form-group {
+			margin-bottom: 1.5rem;
+		}
+
+		.form-group.full-width {
+			grid-column: 1 / -1;
+		}
+
+		.form-label {
+			display: block;
+			font-weight: 700;
+			margin-bottom: 0.5rem;
+			color: var(--black);
+			font-size: 0.95rem;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		.form-input {
+			width: 100%;
+			padding: 1rem 1.25rem;
+			border: 2px solid var(--black);
+			background: white;
+			font-size: 1rem;
+			font-weight: 500;
+			transition: all 0.2s ease;
+			border-radius: 0;
+		}
+
+		.form-input:focus {
+			outline: none;
+			background: var(--pastel-blue);
+			transform: translate(-2px, -2px);
+			box-shadow: 4px 4px 0 var(--black);
+		}
+
+		.form-input.error {
+			border-color: var(--error);
+			background: #FFEBEE;
+		}
+
+		.error-message {
+			color: var(--error);
+			font-size: 0.85rem;
+			margin-top: 0.5rem;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.password-strength {
+			margin-top: 0.5rem;
+			font-size: 0.85rem;
+			font-weight: 600;
+		}
+
+		.strength-weak {
+			color: var(--error);
+		}
+
+		.strength-medium {
+			color: #FFA726;
+		}
+
+		.strength-strong {
+			color: var(--success);
+		}
+
+		.requirements {
+			font-size: 0.85rem;
+			color: var(--gray);
+			margin-top: 0.5rem;
+		}
+
+		.requirement {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			margin-bottom: 0.25rem;
+		}
+
+		.requirement.valid {
+			color: var(--success);
+		}
+
+		.requirement.invalid {
+			color: var(--gray);
+		}
+
+		.btn-primary {
+			width: 100%;
+			padding: 1.25rem;
+			background: var(--pastel-blue);
+			border: 2px solid var(--black);
+			color: var(--black);
+			font-size: 1.1rem;
+			font-weight: 800;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			cursor: pointer;
+			transition: all 0.2s ease;
+			margin-bottom: 1.5rem;
+			border-radius: 0;
+		}
+
+		.btn-primary:hover {
+			background: var(--pastel-coral);
+			transform: translate(-4px, -4px);
+			box-shadow: 8px 8px 0 var(--black);
+		}
+
+		.links {
+			text-align: center;
+			margin-top: 1.5rem;
+		}
+
+		.link {
+			color: var(--black);
+			text-decoration: none;
+			font-weight: 700;
+			border-bottom: 2px solid var(--pastel-mint);
+			padding-bottom: 2px;
+			transition: all 0.2s ease;
+		}
+
+		.link:hover {
+			border-bottom-color: var(--black);
+			background: var(--pastel-mint);
+		}
+
+		.role-badge {
+			display: inline-block;
+			padding: 0.5rem 1rem;
+			background: var(--pastel-mint);
+			border: 2px solid var(--black);
+			font-weight: 700;
+			font-size: 0.9rem;
+			margin-top: 0.5rem;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="register-container">
+		<div class="brand-header">
+			<h1 class="brand-title">Registro</h1>
+			<p class="brand-subtitle">Únete como cliente</p>
+		</div>
+
+		<form th:action="@{/register}" method="post" th:object="${user}">
+			<div th:if="${#fields.hasErrors('global')}" class="alert">
+				<div th:each="err : ${#fields.errors('global')}" th:text="${err}"></div>
+			</div>
+
+			<div class="form-grid">
+				<div class="form-group">
+					<label for="firstName" class="form-label">Nombre</label>
+					<input type="text" id="firstName" th:field="*{firstName}" class="form-input"
+						th:classappend="${#fields.hasErrors('firstName')} ? 'error' : ''" placeholder="Juan" required>
+					<div th:if="${#fields.hasErrors('firstName')}" class="error-message">
+						❌ <span th:errors="*{firstName}"></span>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="lastName" class="form-label">Apellido</label>
+					<input type="text" id="lastName" th:field="*{lastName}" class="form-input"
+						th:classappend="${#fields.hasErrors('lastName')} ? 'error' : ''" placeholder="Pérez" required>
+					<div th:if="${#fields.hasErrors('lastName')}" class="error-message">
+						❌ <span th:errors="*{lastName}"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="email" class="form-label">Email</label>
+				<input type="email" id="email" th:field="*{email}" class="form-input"
+					th:classappend="${#fields.hasErrors('email')} ? 'error' : ''" placeholder="juan.perez@ejemplo.com"
+					required>
+				<div th:if="${#fields.hasErrors('email')}" class="error-message">
+					❌ <span th:errors="*{email}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="password" class="form-label">Contraseña</label>
+				<input type="password" id="password" th:field="*{password}" class="form-input"
+					th:classappend="${#fields.hasErrors('password')} ? 'error' : ''" placeholder="••••••••" required>
+
+				<div class="requirements">
+					<div class="requirement invalid" id="length">Mínimo 8 caracteres</div>
+					<div class="requirement invalid" id="uppercase">1 letra mayúscula</div>
+				</div>
+				<div th:if="${#fields.hasErrors('password')}" class="error-message">
+					❌ <span th:errors="*{password}"></span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+				<input type="password" id="confirmPassword" th:field="*{confirmPassword}" class="form-input"
+					th:classappend="${#fields.hasErrors('confirmPassword')} ? 'error' : ''" placeholder="••••••••"
+					required>
+				<div id="passwordMatch" class="password-strength"></div>
+				<div th:if="${#fields.hasErrors('confirmPassword')}" class="error-message">
+					❌ <span th:errors="*{confirmPassword}"></span>
+				</div>
+			</div>
+
+			<div class="role-badge">
+				🛍️ Te registrarás como CLIENTE
+			</div>
+
+			<button type="submit" class="btn-primary">Crear Cuenta</button>
+		</form>
+
+		<div class="links">
+			<a th:href="@{/login}" class="link">¿Ya tienes cuenta? Accede aquí</a>
+		</div>
+	</div>
+
+	<script>
+		// Validación de contraseña en tiempo real
+		const password = document.getElementById('password');
+		const confirmPassword = document.getElementById('confirmPassword');
+		const requirements = {
+			length: document.getElementById('length'),
+			uppercase: document.getElementById('uppercase')
+		};
+		const matchMessage = document.getElementById('passwordMatch');
+
+		function validatePassword() {
+			const value = password.value;
+
+			// Longitud
+			if (value.length >= 8) {
+				requirements.length.classList.add('valid');
+				requirements.length.classList.remove('invalid');
+			} else {
+				requirements.length.classList.add('invalid');
+				requirements.length.classList.remove('valid');
+			}
+
+			// Mayúscula
+			if (/[A-Z]/.test(value)) {
+				requirements.uppercase.classList.add('valid');
+				requirements.uppercase.classList.remove('invalid');
+			} else {
+				requirements.uppercase.classList.add('invalid');
+				requirements.uppercase.classList.remove('valid');
+			}
+		}
+
+		function checkPasswordMatch() {
+			if (confirmPassword.value === '') {
+				matchMessage.textContent = '';
+			} else if (password.value === confirmPassword.value) {
+				matchMessage.textContent = '✅ Las contraseñas coinciden';
+				matchMessage.className = 'password-strength strength-strong';
+			} else {
+				matchMessage.textContent = '❌ Las contraseñas no coinciden';
+				matchMessage.className = 'password-strength strength-weak';
+			}
+		}
+
+		password.addEventListener('input', validatePassword);
+		confirmPassword.addEventListener('input', checkPasswordMatch);
+
+		// Validación inicial
+		validatePassword();
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Cliente - TuSuperJK</title>
+    <style>
+        :root {
+            --pastel-cream: #FFF8F0;
+            --pastel-mint: #E0F2E9;
+            --pastel-lavender: #E8E0F2;
+            --pastel-coral: #FFD6CC;
+            --pastel-blue: #CCE2FF;
+            --pastel-yellow: #FFF2CC;
+            --pastel-pink: #FFE6E6;
+            --black: #1A1A1A;
+            --gray: #4A4A4A;
+            --dark-gray: #2A2A2A;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 3px solid var(--black);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            border: 2px solid var(--black);
+            background: var(--pastel-lavender);
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .nav-link.active {
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-badge {
+            background: var(--pastel-lavender);
+            padding: 0.75rem 1.25rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn {
+            background: var(--pastel-blue);
+            border: 2px solid var(--black);
+            padding: 0.75rem 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 0;
+            font-size: 1rem;
+        }
+
+        .logout-btn:hover {
+            background: var(--pastel-coral);
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid var(--black);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 12px 12px 0 var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                var(--pastel-coral) 0%, 
+                var(--pastel-blue) 25%, 
+                var(--pastel-mint) 50%, 
+                var(--pastel-lavender) 75%, 
+                var(--pastel-yellow) 100%);
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--black);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--pastel-blue);
+        }
+
+        .stat-card:nth-child(2)::before { background: var(--pastel-coral); }
+        .stat-card:nth-child(3)::before { background: var(--pastel-mint); }
+        .stat-card:nth-child(4)::before { background: var(--pastel-lavender); }
+
+        .stat-card:hover {
+            transform: translate(-6px, -6px);
+            box-shadow: 14px 14px 0 var(--black);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .stat-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .action-card {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 8px 8px 0 var(--black);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--pastel-blue);
+        }
+
+        .action-card:nth-child(2)::before { background: var(--pastel-coral); }
+        .action-card:nth-child(3)::before { background: var(--pastel-mint); }
+        .action-card:nth-child(4)::before { background: var(--pastel-lavender); }
+        .action-card:nth-child(5)::before { background: var(--pastel-yellow); }
+        .action-card:nth-child(6)::before { background: var(--pastel-pink); }
+
+        .action-card:hover {
+            transform: translate(-6px, -6px);
+            box-shadow: 14px 14px 0 var(--black);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .action-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .action-description {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .action-badge {
+            display: inline-block;
+            background: var(--pastel-yellow);
+            border: 2px solid var(--black);
+            padding: 0.5rem 1rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .featured-products {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 2.5rem;
+            margin-top: 3rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .products-scroll {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--pastel-coral) var(--pastel-cream);
+        }
+
+        .products-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .products-scroll::-webkit-scrollbar-track {
+            background: var(--pastel-cream);
+            border: 2px solid var(--black);
+        }
+
+        .products-scroll::-webkit-scrollbar-thumb {
+            background: var(--pastel-coral);
+            border: 2px solid var(--black);
+        }
+
+        .product-card {
+            background: white;
+            border: 3px solid var(--black);
+            padding: 1.5rem;
+            min-width: 280px;
+            box-shadow: 6px 6px 0 var(--black);
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 10px 10px 0 var(--black);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border: 2px solid var(--black);
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            text-align: center;
+            background: white;
+        }
+
+        .btn-primary {
+            background: var(--pastel-blue);
+        }
+
+        .btn-secondary {
+            background: var(--pastel-coral);
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .quick-action {
+            background: white;
+            border: 2px solid var(--black);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 4px 4px 0 var(--black);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-action:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--black);
+        }
+
+        .quick-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-label {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .dashboard-container {
+                padding: 0 1rem;
+            }
+
+            .welcome-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de Navegación Mejorada -->
+    <nav class="navbar">
+        <div class="brand">
+            <span>🛍️</span>
+            <span>TuSuperJK - Cliente</span>
+        </div>
+        
+        <div class="nav-links">
+            <a th:href="@{/cliente/dashboard}" class="nav-link active">
+                <span>🏠</span>
+                <span>Inicio</span>
+            </a>
+            <a th:href="@{/cliente/productos}" class="nav-link">
+                <span>🛒</span>
+                <span>Productos</span>
+            </a>
+            <a th:href="@{/cliente/favoritos}" class="nav-link">
+                <span>❤️</span>
+                <span>Favoritos</span>
+            </a>
+            <a th:href="@{/cliente/pedidos}" class="nav-link">
+                <span>📦</span>
+                <span>Mis Pedidos</span>
+            </a>
+            <a th:href="@{/cliente/carrito}" class="nav-link">
+                <span>🛒</span>
+                <span>Carrito</span>
+            </a>
+            <a th:href="@{/cliente/perfil}" class="nav-link">
+                <span>👤</span>
+                <span>Mi Perfil</span>
+            </a>
+        </div>
+
+        <div class="user-info">
+            <div class="user-badge">
+                <span>👋</span>
+                <span>Hola, <span th:text="${username}"></span></span>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="welcome-card">
+            <h1 class="welcome-title">¡Bienvenido a TuSuperJK!</h1>
+            <p class="welcome-subtitle">
+                Descubre los mejores productos de tus tenderos favoritos. Compra fácil, rápido y seguro desde la comodidad de tu hogar.
+            </p>
+
+            <!-- Estadísticas del Cliente -->
+            <div class="stats-grid">
+                <a th:href="@{/cliente/pedidos}" class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-number" th:text="${totalPedidos != null ? totalPedidos : '3'}"></div>
+                    <div class="stat-label">Pedidos Realizados</div>
+                </a>
+                
+                <a th:href="@{/cliente/favoritos}" class="stat-card">
+                    <div class="stat-icon">❤️</div>
+                    <div class="stat-number" th:text="${totalFavoritos != null ? totalFavoritos : '5'}"></div>
+                    <div class="stat-label">Productos Favoritos</div>
+                </a>
+                
+                <a th:href="@{/cliente/productos}" class="stat-card">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-number" th:text="${totalProductos != null ? totalProductos : '50+'}"></div>
+                    <div class="stat-label">Productos Disponibles</div>
+                </a>
+                
+                <a th:href="@{/cliente/tenderos}" class="stat-card">
+                    <div class="stat-icon">🏪</div>
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Tenderos Cercanos</div>
+                </a>
+            </div>
+
+            <!-- Acciones Principales -->
+            <div class="actions-grid">
+                <a th:href="@{/cliente/productos}" class="action-card">
+                    <div class="action-icon">🛒</div>
+                    <div class="action-title">Explorar Productos</div>
+                    <div class="action-description">
+                        Descubre nuestro catálogo completo de productos frescos y de calidad. Desde alimentos hasta artículos del hogar.
+                    </div>
+                    <div class="action-badge" th:text="${totalProductos != null ? totalProductos + ' productos' : '50+ productos'}"></div>
+                </a>
+                
+                <a th:href="@{/cliente/favoritos}" class="action-card">
+                    <div class="action-icon">❤️</div>
+                    <div class="action-title">Mis Favoritos</div>
+                    <div class="action-description">
+                        Accede rápidamente a tus productos favoritos. Guarda los que más te gustan para comprarlos después.
+                    </div>
+                    <div class="action-badge" th:text="${totalFavoritos != null ? totalFavoritos + ' favoritos' : '5 favoritos'}"></div>
+                </a>
+                
+                <a th:href="@{/cliente/pedidos}" class="action-card">
+                    <div class="action-icon">📦</div>
+                    <div class="action-title">Historial de Pedidos</div>
+                    <div class="action-description">
+                        Revisa el estado de tus pedidos actuales y consulta tu historial de compras anteriores.
+                    </div>
+                    <div class="action-badge" th:text="${totalPedidos != null ? totalPedidos + ' pedidos' : '3 pedidos'}"></div>
+                </a>
+
+                <a th:href="@{/cliente/carrito}" class="action-card">
+                    <div class="action-icon">🛒</div>
+                    <div class="action-title">Mi Carrito</div>
+                    <div class="action-description">
+                        Revisa los productos en tu carrito de compras. Finaliza tu pedido cuando estés listo.
+                    </div>
+                    <div class="action-badge">2 productos</div>
+                </a>
+
+                <a th:href="@{/cliente/perfil}" class="action-card">
+                    <div class="action-icon">👤</div>
+                    <div class="action-title">Mi Perfil</div>
+                    <div class="action-description">
+                        Gestiona tu información personal, direcciones de envío y preferencias de cuenta.
+                    </div>
+                    <div class="action-badge">Perfil</div>
+                </a>
+
+                <a th:href="@{/cliente/ofertas}" class="action-card">
+                    <div class="action-icon">🎯</div>
+                    <div class="action-title">Ofertas Especiales</div>
+                    <div class="action-description">
+                        Descubre las mejores promociones y descuentos exclusivos para nuestros clientes.
+                    </div>
+                    <div class="action-badge">10+ ofertas</div>
+                </a>
+            </div>
+
+            <!-- Acciones Rápidas -->
+            <h2 class="section-title">⚡ Acciones Rápidas</h2>
+            <div class="quick-actions">
+                <a th:href="@{/cliente/productos}?categoria=frutas-verduras" class="quick-action">
+                    <div class="quick-icon">🍎</div>
+                    <div class="quick-label">Frutas & Verduras</div>
+                </a>
+                <a th:href="@{/cliente/productos}?categoria=lacteos" class="quick-action">
+                    <div class="quick-icon">🥛</div>
+                    <div class="quick-label">Lácteos</div>
+                </a>
+                <a th:href="@{/cliente/productos}?categoria=carnes" class="quick-action">
+                    <div class="quick-icon">🍖</div>
+                    <div class="quick-label">Carnes</div>
+                </a>
+                <a th:href="@{/cliente/productos}?categoria=limpieza" class="quick-action">
+                    <div class="quick-icon">🧼</div>
+                    <div class="quick-label">Limpieza</div>
+                </a>
+            </div>
+
+            <!-- Productos Destacados -->
+            <div class="featured-products">
+                <h2 class="section-title">⭐ Productos Destacados</h2>
+                <div class="products-scroll">
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/300x200?text=Arroz+Diana" alt="Arroz Diana" class="product-image">
+                        <h3 class="product-name">Arroz Diana</h3>
+                        <div class="product-price">$2,500</div>
+                        <div class="product-stock">Disponible: 50 unidades</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Agregar al Carrito</button>
+                            <button class="btn btn-secondary">❤️</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/300x200?text=Aceite+Gourmet" alt="Aceite Gourmet" class="product-image">
+                        <h3 class="product-name">Aceite Gourmet</h3>
+                        <div class="product-price">$18,000</div>
+                        <div class="product-stock">Disponible: 25 unidades</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Agregar al Carrito</button>
+                            <button class="btn btn-secondary">❤️</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/300x200?text=Leche+Colanta" alt="Leche Colanta" class="product-image">
+                        <h3 class="product-name">Leche Colanta</h3>
+                        <div class="product-price">$3,500</div>
+                        <div class="product-stock">Disponible: 30 unidades</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Agregar al Carrito</button>
+                            <button class="btn btn-secondary">❤️</button>
+                        </div>
+                    </div>
+                    
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/300x200?text=Pan+Integral" alt="Pan Integral" class="product-image">
+                        <h3 class="product-name">Pan Integral</h3>
+                        <div class="product-price">$4,200</div>
+                        <div class="product-stock">Disponible: 15 unidades</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary">Agregar al Carrito</button>
+                            <button class="btn btn-secondary">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animaciones para los números
+        document.addEventListener('DOMContentLoaded', function() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            statNumbers.forEach(stat => {
+                const finalValue = stat.textContent;
+                let currentValue = 0;
+                
+                if (finalValue.includes('+')) {
+                    // Para valores con "+"
+                    stat.textContent = finalValue;
+                } else {
+                    // Para números normales
+                    const numericValue = parseInt(finalValue);
+                    const increment = Math.max(1, Math.floor(numericValue / 30));
+                    
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= numericValue) {
+                            currentValue = numericValue;
+                            clearInterval(timer);
+                        }
+                        stat.textContent = currentValue;
+                    }, 50);
+                }
+            });
+
+            // Efecto de navegación activa
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Efecto hover mejorado para tarjetas
+            const cards = document.querySelectorAll('.stat-card, .action-card, .product-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transition = 'all 0.3s ease';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

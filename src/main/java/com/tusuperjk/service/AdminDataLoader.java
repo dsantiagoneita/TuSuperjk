@@ -20,12 +20,12 @@ public class AdminDataLoader implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// Crear administradores principales
-		createUserIfNotExists("tu.email@admin.com", "Admin123", "Tu", "Nombre", Role.ADMIN);
-		createUserIfNotExists("amigo@admin.com", "Admin123", "Amigo", "Admin", Role.ADMIN);
+		createUserIfNotExists("Andrey@admin.com", "Admin123456", "Andrey", "Rondon", Role.ADMIN);
+		createUserIfNotExists("neita@admin.com", "Admin123456", "David", "Neita", Role.ADMIN);
 
 		// Usuarios de ejemplo
-		createUserIfNotExists("tendero@ejemplo.com", "Tendero123", "Maria", "Tienda", Role.TENDERO);
-		createUserIfNotExists("cliente@ejemplo.com", "Cliente123", "Carlos", "Cliente", Role.CLIENTE);
+		createUserIfNotExists("tendero@ejemplo.com", "Tendero123456", "Maria", "Tienda", Role.TENDERO);
+		createUserIfNotExists("cliente@ejemplo.com", "Cliente123456", "Carlos", "Cliente", Role.CLIENTE);
 	}
 
 	private void createUserIfNotExists(String email, String password, String firstName, String lastName, Role role) {

@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Panel de Administración - TuSuperJK</title>
+	<style>
+		:root {
+			--pastel-cream: #FFF8F0;
+			--pastel-mint: #E0F2E9;
+			--pastel-lavender: #E8E0F2;
+			--pastel-coral: #FFD6CC;
+			--pastel-blue: #CCE2FF;
+			--pastel-yellow: #FFF2CC;
+			--pastel-pink: #FFE6E6;
+			--black: #1A1A1A;
+			--gray: #4A4A4A;
+			--dark-gray: #2A2A2A;
+			--success: #4CAF50;
+			--warning: #FF9800;
+			--error: #F44336;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+		}
+
+		body {
+			background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-mint) 100%);
+			min-height: 100vh;
+		}
+
+		.navbar {
+			background: rgba(255, 255, 255, 0.98);
+			border-bottom: 3px solid var(--black);
+			padding: 1rem 2rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+		}
+
+		.brand {
+			font-size: 1.75rem;
+			font-weight: 900;
+			color: var(--black);
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 1.5rem;
+		}
+
+		.user-badge {
+			background: var(--pastel-coral);
+			padding: 0.75rem 1.25rem;
+			border: 2px solid var(--black);
+			font-weight: 700;
+			border-radius: 0;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.logout-btn {
+			background: var(--pastel-blue);
+			border: 2px solid var(--black);
+			padding: 0.75rem 1.25rem;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border-radius: 0;
+			font-size: 1rem;
+		}
+
+		.logout-btn:hover {
+			background: var(--pastel-coral);
+			transform: translate(-3px, -3px);
+			box-shadow: 6px 6px 0 var(--black);
+		}
+
+		.dashboard-container {
+			max-width: 1400px;
+			margin: 2rem auto;
+			padding: 0 2rem;
+		}
+
+		.welcome-card {
+			background: rgba(255, 255, 255, 0.95);
+			border: 3px solid var(--black);
+			padding: 3rem;
+			margin-bottom: 3rem;
+			box-shadow: 12px 12px 0 var(--black);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.welcome-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 8px;
+			background: linear-gradient(90deg,
+					var(--pastel-coral) 0%,
+					var(--pastel-blue) 25%,
+					var(--pastel-mint) 50%,
+					var(--pastel-lavender) 75%,
+					var(--pastel-yellow) 100%);
+		}
+
+		.welcome-title {
+			font-size: 3rem;
+			font-weight: 900;
+			color: var(--black);
+			margin-bottom: 1rem;
+			line-height: 1.1;
+		}
+
+		.welcome-subtitle {
+			font-size: 1.3rem;
+			color: var(--gray);
+			margin-bottom: 2rem;
+			line-height: 1.6;
+			max-width: 800px;
+		}
+
+		.stats-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 2rem;
+			margin: 3rem 0;
+		}
+
+		.stat-card {
+			background: white;
+			border: 3px solid var(--black);
+			padding: 2.5rem 2rem;
+			text-align: center;
+			box-shadow: 8px 8px 0 var(--black);
+			transition: all 0.3s ease;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.stat-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 6px;
+			background: var(--pastel-blue);
+		}
+
+		.stat-card:nth-child(2)::before {
+			background: var(--pastel-coral);
+		}
+
+		.stat-card:nth-child(3)::before {
+			background: var(--pastel-mint);
+		}
+
+		.stat-card:nth-child(4)::before {
+			background: var(--pastel-lavender);
+		}
+
+		.stat-card:nth-child(5)::before {
+			background: var(--pastel-yellow);
+		}
+
+		.stat-card:nth-child(6)::before {
+			background: var(--pastel-pink);
+		}
+
+		.stat-card:hover {
+			transform: translate(-6px, -6px);
+			box-shadow: 14px 14px 0 var(--black);
+		}
+
+		.stat-icon {
+			font-size: 3.5rem;
+			margin-bottom: 1rem;
+		}
+
+		.stat-number {
+			font-size: 3.5rem;
+			font-weight: 900;
+			color: var(--black);
+			margin-bottom: 0.5rem;
+			line-height: 1;
+		}
+
+		.stat-label {
+			color: var(--gray);
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			font-size: 0.9rem;
+		}
+
+		.stat-trend {
+			margin-top: 0.5rem;
+			font-weight: 600;
+			font-size: 0.9rem;
+		}
+
+		.trend-up {
+			color: var(--success);
+		}
+
+		.trend-down {
+			color: var(--error);
+		}
+
+		.actions-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+			gap: 2rem;
+			margin: 3rem 0;
+		}
+
+		.action-card {
+			background: white;
+			border: 3px solid var(--black);
+			padding: 2.5rem;
+			text-align: center;
+			box-shadow: 8px 8px 0 var(--black);
+			transition: all 0.3s ease;
+			cursor: pointer;
+			text-decoration: none;
+			color: inherit;
+			display: block;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.action-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 6px;
+			background: var(--pastel-blue);
+		}
+
+		.action-card:hover {
+			transform: translate(-6px, -6px);
+			box-shadow: 14px 14px 0 var(--black);
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.action-icon {
+			font-size: 4rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.action-title {
+			font-size: 1.75rem;
+			font-weight: 800;
+			margin-bottom: 1rem;
+			color: var(--black);
+		}
+
+		.action-description {
+			color: var(--gray);
+			font-size: 1.1rem;
+			line-height: 1.5;
+			margin-bottom: 1.5rem;
+		}
+
+		.action-badge {
+			display: inline-block;
+			background: var(--pastel-yellow);
+			border: 2px solid var(--black);
+			padding: 0.5rem 1rem;
+			font-weight: 700;
+			font-size: 0.9rem;
+		}
+
+		.quick-actions {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 1.5rem;
+			margin: 2rem 0;
+		}
+
+		.quick-action {
+			background: white;
+			border: 2px solid var(--black);
+			padding: 1.5rem;
+			text-align: center;
+			box-shadow: 4px 4px 0 var(--black);
+			transition: all 0.2s ease;
+			cursor: pointer;
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.quick-action:hover {
+			transform: translate(-2px, -2px);
+			box-shadow: 6px 6px 0 var(--black);
+		}
+
+		.quick-icon {
+			font-size: 2rem;
+			margin-bottom: 0.5rem;
+		}
+
+		.quick-label {
+			font-weight: 700;
+			font-size: 0.9rem;
+		}
+
+		.recent-activity {
+			background: white;
+			border: 3px solid var(--black);
+			padding: 2.5rem;
+			margin-top: 3rem;
+			box-shadow: 8px 8px 0 var(--black);
+		}
+
+		.section-title {
+			font-size: 2rem;
+			font-weight: 900;
+			color: var(--black);
+			margin-bottom: 1.5rem;
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+		}
+
+		.activity-list {
+			list-style: none;
+		}
+
+		.activity-item {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			padding: 1.25rem;
+			border-bottom: 2px solid var(--pastel-cream);
+			transition: all 0.2s ease;
+		}
+
+		.activity-item:hover {
+			background: var(--pastel-cream);
+		}
+
+		.activity-item:last-child {
+			border-bottom: none;
+		}
+
+		.activity-icon {
+			font-size: 1.5rem;
+			width: 40px;
+			text-align: center;
+		}
+
+		.activity-content {
+			flex: 1;
+		}
+
+		.activity-text {
+			font-weight: 600;
+			color: var(--black);
+		}
+
+		.activity-time {
+			color: var(--gray);
+			font-size: 0.9rem;
+			margin-top: 0.25rem;
+		}
+
+		.status-badge {
+			padding: 0.4rem 0.8rem;
+			border: 2px solid var(--black);
+			font-weight: 700;
+			font-size: 0.8rem;
+			text-transform: uppercase;
+		}
+
+		.status-success {
+			background: var(--pastel-mint);
+		}
+
+		.status-warning {
+			background: var(--pastel-yellow);
+		}
+
+		.status-error {
+			background: var(--pastel-coral);
+		}
+
+		@media (max-width: 768px) {
+			.navbar {
+				padding: 1rem;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.dashboard-container {
+				padding: 0 1rem;
+			}
+
+			.welcome-card {
+				padding: 2rem 1.5rem;
+			}
+
+			.welcome-title {
+				font-size: 2.5rem;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<nav class="navbar">
+		<div class="brand">
+			<span>🚀</span>
+			<span>TuSuperJK - Administración</span>
+		</div>
+		<div class="user-info">
+			<div class="user-badge">
+				<span>👋</span>
+				<span>Hola, <span th:text="${username}"></span></span>
+			</div>
+			<form th:action="@{/logout}" method="post">
+				<button type="submit" class="logout-btn">🚪 Cerrar Sesión</button>
+			</form>
+		</div>
+	</nav>
+
+	<div class="dashboard-container">
+		<div class="welcome-card">
+			<h1 class="welcome-title">Panel de Control Administrativo</h1>
+			<p class="welcome-subtitle">
+				Gestiona toda la plataforma desde este centro de control. Supervisa usuarios, tenderos, productos y
+				estadísticas del sistema en tiempo real.
+			</p>
+
+			<!-- Estadísticas Principales -->
+			<div class="stats-grid">
+				<div class="stat-card">
+					<div class="stat-icon">👥</div>
+					<div class="stat-number">4</div>
+					<div class="stat-label">Usuarios Totales</div>
+					<div class="stat-trend trend-up">↑ 12% este mes</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon">🏪</div>
+					<div class="stat-number">1</div>
+					<div class="stat-label">Tenderos Activos</div>
+					<div class="stat-trend trend-up">↑ 5% este mes</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon">🛍️</div>
+					<div class="stat-number">2</div>
+					<div class="stat-label">Clientes Registrados</div>
+					<div class="stat-trend trend-up">↑ 8% este mes</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon">📦</div>
+					<div class="stat-number">15</div>
+					<div class="stat-label">Productos Activos</div>
+					<div class="stat-trend trend-up">↑ 20% este mes</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon">💰</div>
+					<div class="stat-number">$2,847</div>
+					<div class="stat-label">Ingresos Totales</div>
+					<div class="stat-trend trend-up">↑ 15% este mes</div>
+				</div>
+
+				<div class="stat-card">
+					<div class="stat-icon">📊</div>
+					<div class="stat-number">98%</div>
+					<div class="stat-label">Satisfacción</div>
+					<div class="stat-trend trend-up">↑ 2% este mes</div>
+				</div>
+			</div>
+
+			<!-- Acciones Principales -->
+			<div class="actions-grid">
+				<a href="/admin/usuarios" class="action-card">
+					<div class="action-icon">👥</div>
+					<div class="action-title">Gestión de Usuarios</div>
+					<div class="action-description">
+						Administra todos los usuarios del sistema, roles y permisos. Crea nuevos administradores y
+						gestiona accesos.
+					</div>
+					<div class="action-badge">4 usuarios activos</div>
+				</a>
+
+				<a href="/admin/tenderos" class="action-card">
+					<div class="action-icon">🏪</div>
+					<div class="action-title">Gestión de Tenderos</div>
+					<div class="action-description">
+						Supervisa y gestiona todos los tenderos registrados. Aprueba nuevas tiendas y revisa
+						inventarios.
+					</div>
+					<div class="action-badge">1 tendero activo</div>
+				</a>
+
+				<a href="/admin/productos" class="action-card">
+					<div class="action-icon">📦</div>
+					<div class="action-title">Gestión de Productos</div>
+					<div class="action-description">
+						Administra el catálogo completo de productos. Agrega, edita o elimina productos del sistema.
+					</div>
+					<div class="action-badge">15 productos</div>
+				</a>
+
+				<a href="/admin/pedidos" class="action-card">
+					<div class="action-icon">📋</div>
+					<div class="action-title">Gestión de Pedidos</div>
+					<div class="action-description">
+						Revisa y gestiona todos los pedidos realizados. Controla estados de envío y pagos.
+					</div>
+					<div class="action-badge">23 pedidos este mes</div>
+				</a>
+
+				<a href="/admin/reportes" class="action-card">
+					<div class="action-icon">📊</div>
+					<div class="action-title">Reportes y Analytics</div>
+					<div class="action-description">
+						Genera reportes detallados, estadísticas y análisis de rendimiento de la plataforma.
+					</div>
+					<div class="action-badge">Nuevos datos</div>
+				</a>
+
+				<a href="/admin/configuracion" class="action-card">
+					<div class="action-icon">⚙️</div>
+					<div class="action-title">Configuración del Sistema</div>
+					<div class="action-description">
+						Configura parámetros generales del sistema, políticas y ajustes de la plataforma.
+					</div>
+					<div class="action-badge">Configuración</div>
+				</a>
+			</div>
+
+			<!-- Acciones Rápidas -->
+			<h2 class="section-title">⚡ Acciones Rápidas</h2>
+			<div class="quick-actions">
+				<a href="/admin/usuarios/crear" class="quick-action">
+					<div class="quick-icon">➕</div>
+					<div class="quick-label">Nuevo Usuario</div>
+				</a>
+				<a href="/admin/tenderos/crear" class="quick-action">
+					<div class="quick-icon">🏪</div>
+					<div class="quick-label">Nuevo Tendero</div>
+				</a>
+				<a href="/admin/productos/crear" class="quick-action">
+					<div class="quick-icon">📦</div>
+					<div class="quick-label">Nuevo Producto</div>
+				</a>
+				<a href="/admin/reportes/descargar" class="quick-action">
+					<div class="quick-icon">📥</div>
+					<div class="quick-label">Descargar Reporte</div>
+				</a>
+			</div>
+
+			<!-- Actividad Reciente -->
+			<div class="recent-activity">
+				<h2 class="section-title">📈 Actividad Reciente</h2>
+				<ul class="activity-list">
+					<li class="activity-item">
+						<div class="activity-icon">👤</div>
+						<div class="activity-content">
+							<div class="activity-text">Nuevo usuario registrado: Carlos Mendoza</div>
+							<div class="activity-time">Hace 5 minutos</div>
+						</div>
+						<div class="status-badge status-success">Nuevo</div>
+					</li>
+					<li class="activity-item">
+						<div class="activity-icon">🏪</div>
+						<div class="activity-content">
+							<div class="activity-text">Tienda "La Esquina" actualizó su inventario</div>
+							<div class="activity-time">Hace 1 hora</div>
+						</div>
+						<div class="status-badge status-success">Completado</div>
+					</li>
+					<li class="activity-item">
+						<div class="activity-icon">📦</div>
+						<div class="activity-content">
+							<div class="activity-text">Producto "Arroz Diana" agotado</div>
+							<div class="activity-time">Hace 2 horas</div>
+						</div>
+						<div class="status-badge status-warning">Alerta</div>
+					</li>
+					<li class="activity-item">
+						<div class="activity-icon">💰</div>
+						<div class="activity-content">
+							<div class="activity-text">Nuevo pedido completado - $45.99</div>
+							<div class="activity-time">Hace 3 horas</div>
+						</div>
+						<div class="status-badge status-success">Éxito</div>
+					</li>
+					<li class="activity-item">
+						<div class="activity-icon">⚠️</div>
+						<div class="activity-content">
+							<div class="activity-text">Intento de acceso fallido desde IP desconocida</div>
+							<div class="activity-time">Hace 5 horas</div>
+						</div>
+						<div class="status-badge status-error">Seguridad</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		// Animaciones simples para los números
+		document.addEventListener('DOMContentLoaded', function () {
+			const statNumbers = document.querySelectorAll('.stat-number');
+
+			statNumbers.forEach(stat => {
+				const finalValue = stat.textContent;
+				let currentValue = 0;
+
+				if (finalValue.includes('$')) {
+					// Para valores monetarios
+					const numericValue = parseInt(finalValue.replace('$', '').replace(',', ''));
+					const increment = numericValue / 50;
+
+					const timer = setInterval(() => {
+						currentValue += increment;
+						if (currentValue >= numericValue) {
+							currentValue = numericValue;
+							clearInterval(timer);
+						}
+						stat.textContent = '$' + Math.floor(currentValue).toLocaleString();
+					}, 30);
+				} else if (finalValue.includes('%')) {
+					// Para porcentajes
+					const numericValue = parseInt(finalValue.replace('%', ''));
+					const increment = 1;
+
+					const timer = setInterval(() => {
+						currentValue += increment;
+						if (currentValue >= numericValue) {
+							currentValue = numericValue;
+							clearInterval(timer);
+						}
+						stat.textContent = currentValue + '%';
+					}, 30);
+				} else {
+					// Para números normales
+					const numericValue = parseInt(finalValue);
+					const increment = Math.max(1, Math.floor(numericValue / 50));
+
+					const timer = setInterval(() => {
+						currentValue += increment;
+						if (currentValue >= numericValue) {
+							currentValue = numericValue;
+							clearInterval(timer);
+						}
+						stat.textContent = currentValue.toLocaleString();
+					}, 30);
+				}
+			});
+		});
+	</script>
+</body>
+
+</html>
